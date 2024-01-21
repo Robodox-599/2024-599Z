@@ -2,8 +2,8 @@
 #include "main.h"
 #include "api.h"
 #include "okapi/api.hpp"
-#include <cmath>
 #include <algorithm>
-#include <math.h>
-#include <optional>
+#ifndef M_PI
+#define M_PI (3.14159265358979323846)
+#endif
 using namespace okapi;
