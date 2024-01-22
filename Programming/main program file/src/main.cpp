@@ -79,6 +79,7 @@ void pre_auton(void) {
 void autonomous(void) {
   // autos will go here
   //meer make better auto selector later :sob:
+  
 }
 
 /*---------------------------------------------------------------------------*/
@@ -110,9 +111,9 @@ void kickerControl(){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
     kickerMotor.spin(forward, 65, velocityUnits::pct); 
-  } else if(!kickerSwitch.pressing()){
+  } else if(Controller1.ButtonL2.pressing()){
     /* cranks the kicker, till the limit switch is being pressed. */
-    kickerMotor.spin(forward, 100, velocityUnits::pct); 
+    kickerMotor.spinToPosition(65, degrees);
  } else {
     // if there is no input then it will brake the kicker motor to reduce strain on motor
 	  /*brakes motor using coast*/
@@ -125,7 +126,7 @@ void intakeControls(){
  if (Controller1.ButtonR1.pressing()){
     /* if r1 is being pressed then it will spin the iintake motor at 100% speed*/
     /* spins the intake Motor at 100% percent speed and spins it backward to intake the ball*/
-    intakeMotor.spin(reverse, -100, velocityUnits::pct); 
+    intakeMotor.spin(reverse, 100, velocityUnits::pct); 
 } else if (Controller1.ButtonR2.pressing()) {
     /* if r2 is being pressed then it will spin the intake motor at 100% speed*/
     /* spins the intake Motor at 100% percent speed and spins it forward to outake the ball 
@@ -249,8 +250,6 @@ void usercontrol(void) {
     kickerControl();
     // flaps controls
     Controller1.ButtonB.pressed(toggleFlaps); // calls the toggle function for the flaps when the button is pressed
-    // climb controls
-    Controller1.ButtonY.pressed(toggleclimb); // calls the toggle function for climb when the button is pressed
     //intake controls
     intakeControls();
    
