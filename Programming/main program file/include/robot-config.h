@@ -16,6 +16,7 @@ extern limit kickerSwitch;
 extern digital_out climbPistons;
 extern motor LM;
 extern motor RM;
+extern inertial IMU;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

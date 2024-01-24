@@ -9,9 +9,9 @@
 void default_constants(){
   chassis.set_constants(  
           /* max voltage | kp constants | ki constants | kd constants |  start ki constants */
-/* turn  */    12        ,      .6      ,     .03      ,      6       ,         15          ,
-/* drive */    12        ,      1.5     ,       0      ,      10      ,         0           ,
-/* swing */    12        ,      .3      ,     .001     ,      2       ,         15          , 
+/* turn  */    12       ,      0.4      ,     0.02    ,      4        ,         15          ,
+/* drive */    127        ,      3    ,       0      ,      1         ,         0           ,
+/* swing */    127        ,      .9      ,     0.015     ,      10.5       ,         15          , 
 /*heading*/    12        ,      .4      ,       0      ,      1       ,         0           ); 
   chassis.set_exit_conditions(
          /* settle error   |     settle time    |   timeout   */
@@ -30,14 +30,14 @@ void drive_percent(float per){
   DriveR.spin(fwd, per, percent); 
 }
 void intake(){
-  intakeMotor.spin(forward, 100, percent);
+  intakeMotor.spin(forward, -100, percent);
 }
 void outake(){
-  intakeMotor.spin(forward, -100, percent);
+  intakeMotor.spin(forward, 100, percent);
 }
 
 void corner_score(int iterate){
-  for(int i; i>iterate; i++){
+  for(int i=0; i>iterate; i++){
   drive_percent(-100); // drives WITHOUT PID control loop at full speed backwards
   wait(150, msec); // waits 150 msec before driving forward again
   drive_percent(100);
@@ -45,7 +45,10 @@ void corner_score(int iterate){
   }
 }
 // autos will start below 
-
+void PID_test(){
+  default_constants();
+  chassis.left_swing_to_angle(90);
+}
 void e_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_0
   intake(); //intake spins to hold climb triball
@@ -78,27 +81,32 @@ void e_Off(){
 void q_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.p
   intake(); //intake spins to hold alliance ball
-  chassis.drive_distance(30); // chassis drives forward till in front of goal
-  chassis.turn_to_angle(120, 8); // chassis turns to face goal
+  chassis.drive_distance(36); // chassis drives forward till in front of goal
+  chassis.turn_to_angle(90, 8); // chassis turns to face goal
   outake(); // outakes alliance ball
-  chassis.turn_to_angle(0); // resets chassis to orignal starting position
-  chassis.drive_distance(20); // drives to furthermost triball 
+  wait(250, msec);
+  chassis.turn_to_angle(305); // resets chassis to orignal starting position
+  chassis.drive_distance(15); // drives to furthermost triball 
   intake(); // intakes further most triball
-  chassis.turn_to_angle(120, 8); // turns to face goal
+  wait(150, msec);
+  chassis.turn_to_angle(90, 8); // turns to face goal
   outake(); // outakes further most triball
-  chassis.turn_to_angle(270); // turns to face 2nd long bar triball
-  chassis.drive_distance(25); // drives to ball
-  intake(); // intakes triball
-  chassis.drive_distance(-12); //drives back
-  chassis.turn_to_angle(120); // turns to face goal
-  outake(); // outakes triball
-  wings(true); //opens wings
-  chassis.drive_distance(40); // drives and scores all 4 balls
-  wings(false); // closes wings
-  chassis.drive_distance(-15); // drives out of goal
-  chassis.turn_to_angle(315);// turns to face climb bar
-  chassis.drive_distance(40); // drives into climb bar to assist in AWP
-  //totral estimated points: 20pts
+  wait(150, msec);
+  chassis.turn_to_angle(180); // turns to face 2nd long bar triball
+  // chassis.drive_distance(20); // drives to ball
+  // intake(); // intakes tribal
+  // wait(150, msec);
+  // chassis.drive_distance(-20); //drives back
+  // chassis.turn_to_angle(90); // turns to face goal
+  // outake(); // outakes triball
+  // wait(150, msec);
+  // wings(true); //opens wings
+  // chassis.drive_distance(40); // drives and scores all 4 balls
+  // wings(false); // closes wings
+  // chassis.drive_distance(-15); // drives out of goal
+  // chassis.turn_to_angle(315);// turns to face climb bar
+  // chassis.drive_distance(40); // drives into climb bar to assist in AWP
+  // //totral estimated points: 20pts
 }
 
 void e_Def(){
