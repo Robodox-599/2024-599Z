@@ -2,38 +2,21 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
-// LB                   motor         19              
-// RB                   motor         11              
-// LF                   motor         18              
-// RF                   motor         3               
-// kickerMotor          motor         20              
-// intakeMotor          motor         12              
+// LB                   motor         13              
+// RB                   motor         12              
+// LF                   motor         11              
+// RF                   motor         2               
+// kickerMotor          motor         14              
+// intakeMotor          motor         10              
 // flapsPistonLeft      digital_out   A               
 // flapsPistonRight     digital_out   B               
 // kickerSwitch         limit         C               
 // climbPistons         digital_out   D               
-// LM                   motor         10              
-// RM                   motor         13              
-// IMU                  inertial      14              
+// LM                   motor         21              
+// RM                   motor         20              
 // ---- END VEXCODE CONFIGURED DEVICES ----
-// ---- START VEXCODE CONFIGURED DEVICES ----
-// Robot Configuration:
-// [Name]               [Type]        [Port(s)]
-// Controller1          controller                    
-// LB                   motor         19              
-// RB                   motor         11              
-// LF                   motor         8               
-// RF                   motor         3               
-// kickerMotor          motor         20              
-// intakeMotor          motor         12              
-// flapsPistonLeft      digital_out   A               
-// flapsPistonRight     digital_out   B               
-// kickerSwitch         limit         C               
-// climbPistons         digital_out   D               
-// LM                   motor         10              
-// RM                   motor         13              
-// IMU                  inertial      14              
-// ---- END VEXCODE CONFIGURED DEVICES ----
+
+
 #include "vex.h"
 using namespace vex;
 competition Competition;
@@ -45,7 +28,7 @@ motor_group(LB, LM, LF), /* left motor group */
 
 motor_group(RB, RM, RF), /* right motor group */
 
-PORT14, /* inertial sensor port here */
+PORT3, /* inertial sensor port here */
 
 2.75, /* wheel diameter*/
 
@@ -62,18 +45,11 @@ void pre_auton(void) {
   vexcodeInit();
   default_constants();
 }
-float reduce_0_to_36(float angle) {
-  /* Ensures angle is within the range [0, 360) degrees. Loops until the angle falls within the range.*/
-  while(!(angle >= 0 && angle < 360)) {
-    if(angle < 0) { angle += 360; }   // Shifts negative angles to positive by adding 360 degrees
-    if(angle >= 360) { angle -= 360; } // Reduces angles exceeding 360 degrees by subtracting 360 degrees
-  }
-  return angle; // Returns the adjusted angle within the range [0, 360)
-}
+
 void autonomous(void) {
   // autos will go here
   //meer make better auto selector later :sob:
-  q_Off();
+  
 }
 
 /*---------------------------------------------------------------------------*/
@@ -104,9 +80,10 @@ void kickerControl(){
  if (Controller1.ButtonL1.pressing()){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(reverse, 40, velocityUnits::pct); 
+    kickerMotor.spin(forward, 65, velocityUnits::pct); 
   } else if(Controller1.ButtonL2.pressing()){
     /* cranks the kicker, till the limit switch is being pressed. */
+    kickerMotor.spinToPosition(65, degrees);
  } else {
     // if there is no input then it will brake the kicker motor to reduce strain on motor
 	  /*brakes motor using coast*/
@@ -143,20 +120,16 @@ void tankDrive(float leftIn, float rightIn){
 /* This is the tank drive function. This uses the inputs passed in as parameters to drive the left or right motors. Overall this function was created in order to create modular code throughout the program.*/
   if (!(leftIn == 0)){
     LB.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
-    LM.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
     LF.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
   } else {
     LB.stop(brakeType::brake);
     LF.stop(brakeType::brake);
-    LM.stop(brakeType::brake);
   }
    if (!(rightIn == 0)){
     RB.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
-    RM.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
     RF.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
    } else {
     RB.stop(brakeType::brake);
-    RM.stop(brakeType::brake);
     RF.stop(brakeType::brake);
    }
 }
@@ -187,7 +160,7 @@ void tankDriveControl(float leftIn, float rightIn){
  float rightVal;
  if (fabs(leftIn) >= 5 ){
     /* If the absolute value of the input is greater than 5% then the variable leftVal will be changed to be 95% of the input from the user, this is used to set the deadzones. Also, this will apply the modifier in order to change the output to make sure that the slow toggle will limit the max speed to be the modifier value, which was defined in the toggle function*/
-   leftVal = leftIn*.90;
+   leftVal = leftIn*.95;
  } else {
    /*If the absolute value of the input is less than 5% then the variable leftVal will be changed to be 0, and ignore the input from the user. This is a part of the deadzones. */
    leftVal = 0;
@@ -202,32 +175,38 @@ void tankDriveControl(float leftIn, float rightIn){
  /*After deadzones are calculated, these new Values will be passed into the tankDrive function in order to drive the robot*/
  tankDrive(leftVal, rightVal);
 }
-bool latch = false; 
-bool toggleState = true;
-void toggle(bool input){
- /*This is the toggle function, it uses pressing input as a parameter, to control the ToggleState variable, in order to control the modifier value.
-  This function applies a gate and latch method of toggle in order to propperly toggle through slow driving and regular.*/
- if(input && latch){
-   // if both the input and the latch are true, then it will inverse the values of both toggleState and latch.
-   toggleState = !toggleState;
-   latch = !latch;
- }
- else if(!input){
-   // if there is no input then inverse the latch variable
-  latch = !latch;
- }
- if(toggleState){
-   //if the toggle state variable is true then it will change the value of the modifier to a value passed in as a parameter through the main function.
-   flapsPistonLeft.set(true);
-   flapsPistonRight.set(true); 
- }
- else{
-   // if the toggle state is false then it will return the modifier to its original state of 1.
-   flapsPistonLeft.set(false);
-   flapsPistonRight.set(false);
+void flapsPistons(bool val){
+  flapsPistonLeft.set(val);
+  flapsPistonRight.set(val);
+}
+void toggleFlaps(){
+/*This is the toggleFlaps function, it takes in no parameters but uses the value of the flapsToggled in
+order to determine if the flapsPiston should be set to true or false. It is called in the main function
+as a callback for the .pressed() function. It will first switch the flapsToggled value to inverse it, then
+check the state of the flapsToggled*/
+ flapsToggled = !flapsToggled; // inverses state of flapsToggled
+ if (flapsToggled){
+   //if flapsToggled is true then it will switch the wedge piston to be the true
+   flapsPistons(true);
+ } else{
+   //if flapsToggled is false then it will switch the wedge piston to be the false
+   flapsPistons(false);
  }
 }
-
+void toggleclimb(){
+/*This is the toggleclimb function, it takes in no parameters but uses the value of the climbToggled in
+order to determine if the climbPistons should be set to true or false. It is called in the main function
+as a callback for the .pressed() function. It will first switch the climbToggled value to inverse it, then
+check the state of the climbToggled*/
+ climbToggled = !climbToggled; // inverses state of climbToggled
+ if (climbToggled){
+   //if climbToggled is true then it will switch the climb pistons to be the true
+   climbPistons.set(true);
+ } else{
+   //if climbToggled is false then it will switch the climb pistons to be the false
+   climbPistons.set(false);
+ }
+}
 /*                         End Function Declarations                                             */
 /*-----------------------------------------------------------------------------------------------*/
 
@@ -240,7 +219,7 @@ void usercontrol(void) {
     //kicker controls
     kickerControl();
     // flaps controls
-    toggle(Controller1.ButtonB.pressing());
+    Controller1.ButtonB.pressed(toggleFlaps); // calls the toggle function for the flaps when the button is pressed
     //intake controls
     intakeControls();
    
