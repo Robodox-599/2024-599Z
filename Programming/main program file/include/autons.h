@@ -11,4 +11,5 @@ void q_Off();
 void e_Off();
 void q_Def();
 void e_Def();
+void auto_skills();
 //update autos here later

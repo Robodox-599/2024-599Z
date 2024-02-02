@@ -73,8 +73,11 @@ float reduce_0_to_36(float angle) {
 void autonomous(void) {
   // autos will go here
   //meer make better auto selector later :sob:
-  q_Off();
+  //q_Def();
+  //q_Off();
+   auto_skills();
 }
+
 
 /*---------------------------------------------------------------------------*/
 /*                                                                           */
@@ -104,7 +107,7 @@ void kickerControl(){
  if (Controller1.ButtonL1.pressing()){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(reverse, 40, velocityUnits::pct); 
+    kickerMotor.spin(reverse, 50, velocityUnits::pct); 
   } else if(Controller1.ButtonL2.pressing()){
     /* cranks the kicker, till the limit switch is being pressed. */
  } else {
@@ -185,7 +188,7 @@ void arcadeDriveControl(float fwdIn, float trnIn){
 void tankDriveControl(float leftIn, float rightIn){
  float leftVal;
  float rightVal;
- if (fabs(leftIn) >= 5 ){
+ if (fabs(leftIn) >= 10 ){
     /* If the absolute value of the input is greater than 5% then the variable leftVal will be changed to be 95% of the input from the user, this is used to set the deadzones. Also, this will apply the modifier in order to change the output to make sure that the slow toggle will limit the max speed to be the modifier value, which was defined in the toggle function*/
    leftVal = leftIn*.90;
  } else {
@@ -203,7 +206,7 @@ void tankDriveControl(float leftIn, float rightIn){
  tankDrive(leftVal, rightVal);
 }
 bool latch = false; 
-bool toggleState = true;
+bool toggleState = false;
 void toggle(bool input){
  /*This is the toggle function, it uses pressing input as a parameter, to control the ToggleState variable, in order to control the modifier value.
   This function applies a gate and latch method of toggle in order to propperly toggle through slow driving and regular.*/
