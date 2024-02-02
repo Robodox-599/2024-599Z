@@ -35,7 +35,11 @@ void intake(){
 void outake(){
   intakeMotor.spin(forward, 100, percent);
 }
-
+void kickerMotorLaunch(){
+  for(int i =0; i<50; i++){
+    kickerMotor.spinFor(-180, degrees, true);
+  }
+}
 void corner_score(int iterate){
   for(int i=0; i>iterate; i++){
   drive_percent(-100); // drives WITHOUT PID control loop at full speed backwards
@@ -81,23 +85,27 @@ void e_Off(){
 void q_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.p
   intake(); //intake spins to hold alliance ball
-  chassis.drive_distance(36); // chassis drives forward till in front of goal
+  chassis.drive_distance(35); // chassis drives forward till in front of goal
   chassis.turn_to_angle(90, 8); // chassis turns to face goal
   outake(); // outakes alliance ball
-  wait(250, msec);
-  chassis.turn_to_angle(305); // resets chassis to orignal starting position
-  chassis.drive_distance(15); // drives to furthermost triball 
+  wait(400, msec);
+  chassis.turn_to_angle(295); // resets chassis to orignal starting position
   intake(); // intakes further most triball
-  wait(150, msec);
+  chassis.drive_distance(23); // drives to furthermost triball 
+  wait(400, msec);
   chassis.turn_to_angle(90, 8); // turns to face goal
   outake(); // outakes further most triball
-  wait(150, msec);
-  chassis.turn_to_angle(180); // turns to face 2nd long bar triball
-  // chassis.drive_distance(20); // drives to ball
-  // intake(); // intakes tribal
-  // wait(150, msec);
-  // chassis.drive_distance(-20); //drives back
-  // chassis.turn_to_angle(90); // turns to face goal
+  wait(400, msec);
+  chassis.drive_distance(30); // turns to face 2nd long bar triball
+  chassis.drive_distance(-5); //drives back
+  chassis.turn_to_angle(230); // turns to face goal
+  intake();
+  chassis.drive_distance(30);
+  wait(400,msec);
+  chassis.drive_distance(-20);
+  chassis.turn_to_angle(90,8);
+  outake(); // outakes triball
+  chassis.drive_distance(20);
   // outake(); // outakes triball
   // wait(150, msec);
   // wings(true); //opens wings
@@ -129,24 +137,33 @@ void e_Def(){
   chassis.turn_to_angle(0); // turns to original position
   chassis.drive_distance(15); // drives forward 
   chassis.turn_to_angle(135); // turns a little bit more
-  chassis.drive_distance(30); // drives into climb bar to push 2 more balls over 
+  chassis.drive_distance(33); // drives into climb bar to push 2 more balls over 
   // total estimated points: 13pts
 }
 
 void q_Def(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_20
-  outake(); // spin outake to not posses any triball
-  flapsPistonLeft.set(true); // opens wing to flick out matchload triball
-  chassis.drive_distance(5); // drives into matchload triball with wing extended to flick out matchload triball
-  flapsPistonLeft.set(false); // closes wing
-  chassis.drive_distance(-22); // drives backwards and scores alliance triball
-  chassis.drive_distance(12); // drives back forwards 
+  intake(); // spin outake to not posses any triball
+  chassis.drive_distance(-5);
+  flapsPistonRight.set(true); // opens wing to flick out matchload triball
+  wait(500, msec);
+  chassis.drive_distance(10);
+  chassis.drive_distance(-4);
+  wait(400,  msec);
+  chassis.drive_distance(5);
+  flapsPistonRight.set(false); // closes wing
+  chassis.drive_distance(5);
   chassis.turn_to_angle(315); // turn to climb bar
   chassis.drive_distance(30); // drive to climb bar to get AWP
+  outake(); // spin outake to not posses any triball
+
   // total estimated points: 9pts
 }
+void auto_skills(){
+  outake();
+  wait(30,seconds);
+  flapsPistonLeft.set(true);
+   chassis.drive_distance(50);
+   chassis.drive_distance(-50);
 
-// void auto_skills(){
-//   chassis.drive_distance();
-
-// }
+}
