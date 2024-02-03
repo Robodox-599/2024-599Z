@@ -15,13 +15,10 @@ Drive::Drive(
     pros::IMU& IMU,  
     double wheel_diameter,
     double wheel_ratio,
-    int gyro_scale,
     double trackWidth,
-    double start_heading,
-    int rpm):
+    double start_heading):
   wheel_diameter(wheel_diameter),
   wheel_ratio(wheel_ratio),
-  gyro_scale(gyro_scale),
   drive_in_to_deg_ratio(wheel_ratio/360.0*M_PI*wheel_diameter),
   start_heading(start_heading),
   leftMotors(leftMotors),
@@ -31,7 +28,7 @@ Drive::Drive(
 }
 float Drive::get_absolute_heading(){ 
   // Retrieves the raw rotation value from the Gyro sensor, scales it, and adjusts it within 0 to 360 degrees
-  return( reduce_0_to_360( IMU.get_rotation() * 360.0 / gyro_scale ) ); 
+  return( reduce_0_to_360( IMU.get_rotation() * 360.0 / 360.0 ) ); 
 }
 
 float Drive::get_left_position_in(){
@@ -56,9 +53,6 @@ float Drive::get_right_position_in(){
 float Drive::distance_encoder_position(){
   return ((get_right_position_in()+get_left_position_in())/2);
 }
-
-
-
 constexpr double start_heading = 90;
 
 double x = 0;
@@ -78,13 +72,8 @@ void Drive::odometry() {
 
         // At the end of the loop, set previous_distance_traveled for the next loop iteration
         previous_distance_traveled = distance_encoder_position();
-
+        pros::screen::print(TEXT_MEDIUM, 1, "X Position: %3f", x);
+        pros::screen::print(TEXT_MEDIUM, 2, "Y Position: %3f", y);
         pros::delay(10);
     }
-}
-float Drive::coordinatesX(){
-  return(x);
-}
-float Drive::coordinatesY(){
-  return(y);
 }
