@@ -56,10 +56,6 @@ float chassisOdom::get_right_position_in(){
 float chassisOdom::distance_encoder_position(){
   return ((get_right_position_in()+get_left_position_in())/2);
 }
-constexpr double start_heading = 90;
-
-double x = 0;
-double y = 0;
 float chassisOdom::xVal(){
   return(x);
 }
@@ -67,12 +63,12 @@ float chassisOdom::yVal(){
   return(y);
 }
 float chassisOdom::resetEncoders(){
-      leftMotors.tare_position();
-      rightMotors.tare_position();
+  leftMotors.tare_position();
+  rightMotors.tare_position();
 }
 float chassisOdom::lcdOut(){
-  pros::screen::print(TEXT_MEDIUM, 1, "X Position: %3f", xVal());
-  pros::screen::print(TEXT_MEDIUM, 2, "Y Position: %3f",  yVal());
+  pros::lcd::print(0, "X Position: %3f", xVal());
+  pros::lcd::print( 1, "Y Position: %3f", yVal());
 }
 float chassisOdom::xCalc(float change_in_distance){
   x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
@@ -84,14 +80,23 @@ float chassisOdom::updatePos(float previous_distance_traveled){
   previous_distance_traveled = distance_encoder_position();
 }
 void chassisOdom::odometry() {
-  chassisOdom::resetEncoders();
+  // leftMotors.tare_position();
+  // rightMotors.tare_position();
+  resetEncoders();
   double previous_distance_traveled = 0;
   while (true) {   
     double change_in_distance = distance_encoder_position() - previous_distance_traveled;
     xCalc(change_in_distance);
     yCalc(change_in_distance);
-    updatePos(previous_distance_traveled);
-    lcdOut();  
+
+    // x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+    // y += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+    previous_distance_traveled = distance_encoder_position();
+    // pros::lcd::print(0, "X Position: %3f", xVal());
+    // pros::lcd::print( 1, "Y Position: %3f", yVal());
+    PRINT("X Position: " + std::to_string(xVal()));
+    PRINT("Y Position: " + std::to_string(yVal()));  
+    // auto foo = xVal();
     pros::delay(10);
   }
 }

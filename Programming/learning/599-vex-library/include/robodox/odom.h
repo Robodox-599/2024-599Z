@@ -7,6 +7,8 @@ class chassisOdom{
         float drive_in_to_deg_ratio;
         double start_heading;
         void odometry();  
+        double x = 0;
+        double y = 0;
     public: 
         pros::Motor_Group& leftMotors;
         pros::Motor_Group& rightMotors;

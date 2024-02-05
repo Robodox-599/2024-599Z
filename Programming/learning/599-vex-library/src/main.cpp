@@ -7,28 +7,24 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // drive motors
-pros::Motor LF(-13, pros::E_MOTOR_GEARSET_06); // left front motor. reversed
-// pros::Motor LM(-5, pros::E_MOTOR_GEARSET_06); // left middle motor. reversed
-// pros::Motor LB(-4, pros::E_MOTOR_GEARSET_06); // left back motor. reversed
-// pros::Motor RF(3, pros::E_MOTOR_GEARSET_06); // right front motor. 
-// pros::Motor RM(2, pros::E_MOTOR_GEARSET_06); // right middle motor. 
-pros::Motor RB(20, pros::E_MOTOR_GEARSET_06); // right back motor.
-
+pros::Motor L(-13, pros::E_MOTOR_GEARSET_06); // left front motor. reversed 
+pros::Motor R(20, pros::E_MOTOR_GEARSET_06); // right back motor.
 // motor groups
-pros::MotorGroup leftMotors({LF/*, LM, LB*/}); // left motor group
-pros::MotorGroup rightMotors({/*RF, RM, */RB}); // right motor group
+pros::MotorGroup leftMotors({L}); // left motor group
+pros::MotorGroup rightMotors({R}); // right motor group
 
 // IMU port 2
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken
 
 chassisOdom chassis(
-leftMotors, /* left motor group */
-rightMotors, /* right motor group */
-inert, /* inertial sensor port here */
-2.75, /* wheel diameter*/
-0.75, /*gear ratio after */
-10.5, /* track width */
-90 /* start heading */);
+	leftMotors, /* left motor group */
+	rightMotors, /* right motor group */
+	inert, /* inertial sensor port here */
+	2.75, /* wheel diameter*/
+	0.75, /*gear ratio after */
+	10.5, /* track width */
+	90 /* start heading */
+);
 
 /**
  * A callback function for LLEMU's center button.
@@ -91,17 +87,13 @@ void competition_initialize() {}
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
-void autonomous() { // Start our odometry thread.
-    // The odometry loop will run in the background while moving.
-    // Spin our drivetrain forward for 2 seconds.
+void autonomous() {
+	pros::delay(1000);
     leftMotors.move(127);
 	rightMotors.move(127);
-
     pros::delay(1000);
 	leftMotors.brake();
 	rightMotors.brake();
-
-    // Print where we ended up on the coordinate plane onto the brain screen.
 }
 
 
@@ -121,6 +113,7 @@ void autonomous() { // Start our odometry thread.
 
 void opcontrol() {
 	autonomous();
+	PRINT("hello");
 	while (true) {
 
 		// int left = master.get_analog(ANALOG_LEFT_Y);
