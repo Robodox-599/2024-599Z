@@ -1,6 +1,8 @@
-#include "robodox/odom.h"
 #include "robodox/PRELUDE.hpp"
-#include "main.h"
+#include "robodox/odom.h"
+#include "robodox/drive.h"
+#include "robodox/PID.h"
+
 float reduce_0_to_360(float angle) {
   /* Ensures angle is within the range [0, 360) degrees. Loops until the angle falls within the range.*/
   while(!(angle >= 0 && angle < 360)) {
@@ -9,7 +11,7 @@ float reduce_0_to_360(float angle) {
   }
   return angle; // Returns the adjusted angle within the range [0, 360)
 }
-Drive::Drive(
+chassisOdom::chassisOdom(
     pros::Motor_Group&leftMotors,
     pros::Motor_Group& rightMotors,
     pros::IMU& IMU,  
@@ -25,13 +27,14 @@ Drive::Drive(
   rightMotors(rightMotors),
   IMU(IMU)
 {
+  pros::Task odomLoop([this] { odometry(); }, TASK_PRIORITY_DEFAULT + 2);
 }
-float Drive::get_absolute_heading(){ 
+float chassisOdom::get_absolute_heading(){ 
   // Retrieves the raw rotation value from the Gyro sensor, scales it, and adjusts it within 0 to 360 degrees
   return( reduce_0_to_360( IMU.get_rotation() * 360.0 / 360.0 ) ); 
 }
 
-float Drive::get_left_position_in(){
+float chassisOdom::get_left_position_in(){
   double left_pos;
   // Retrieves the position of the left motor group in degrees and converts it to inches using the drive_in_to_deg_ratio
   std::vector<double> positions = leftMotors.get_positions();
@@ -40,7 +43,7 @@ float Drive::get_left_position_in(){
   }
   return( left_pos * drive_in_to_deg_ratio );
 }
-float Drive::get_right_position_in(){
+float chassisOdom::get_right_position_in(){
   double right_pos;
   // Retrieves the position of the right motor group in degrees and converts it to inches using the drive_in_to_deg_ratio
   std::vector<double> positions = rightMotors.get_positions();
@@ -50,30 +53,45 @@ float Drive::get_right_position_in(){
   return( right_pos * drive_in_to_deg_ratio );
 }
 
-float Drive::distance_encoder_position(){
+float chassisOdom::distance_encoder_position(){
   return ((get_right_position_in()+get_left_position_in())/2);
 }
 constexpr double start_heading = 90;
 
 double x = 0;
 double y = 0;
-
-void Drive::odometry() {
-    leftMotors.tare_position();
-    rightMotors.tare_position();
-
-    double previous_distance_traveled = 0;
-
-    while (true) {   
-        double change_in_distance = distance_encoder_position() - previous_distance_traveled;
-        
-        x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
-        y += change_in_distance * std::sin(get_absolute_heading() * (M_PI / 180));
-
-        // At the end of the loop, set previous_distance_traveled for the next loop iteration
-        previous_distance_traveled = distance_encoder_position();
-        pros::screen::print(TEXT_MEDIUM, 1, "X Position: %3f", x);
-        pros::screen::print(TEXT_MEDIUM, 2, "Y Position: %3f", y);
-        pros::delay(10);
-    }
+float chassisOdom::xVal(){
+  return(x);
+}
+float chassisOdom::yVal(){
+  return(y);
+}
+float chassisOdom::resetEncoders(){
+      leftMotors.tare_position();
+      rightMotors.tare_position();
+}
+float chassisOdom::lcdOut(){
+  pros::screen::print(TEXT_MEDIUM, 1, "X Position: %3f", xVal());
+  pros::screen::print(TEXT_MEDIUM, 2, "Y Position: %3f",  yVal());
+}
+float chassisOdom::xCalc(float change_in_distance){
+  x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+}
+float chassisOdom::yCalc(float change_in_distance){
+  y += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+}
+float chassisOdom::updatePos(float previous_distance_traveled){
+  previous_distance_traveled = distance_encoder_position();
+}
+void chassisOdom::odometry() {
+  chassisOdom::resetEncoders();
+  double previous_distance_traveled = 0;
+  while (true) {   
+    double change_in_distance = distance_encoder_position() - previous_distance_traveled;
+    xCalc(change_in_distance);
+    yCalc(change_in_distance);
+    updatePos(previous_distance_traveled);
+    lcdOut();  
+    pros::delay(10);
+  }
 }

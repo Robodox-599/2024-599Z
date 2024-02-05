@@ -1,7 +1,7 @@
-#include "main.h"
-#include "robodox/odom.h"
 #include "robodox/PRELUDE.hpp"
-#include "api.h"
+#include "robodox/odom.h"
+#include "robodox/drive.h"
+#include "robodox/PID.h"
 
 // Controller 
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
@@ -21,7 +21,7 @@ pros::MotorGroup rightMotors({/*RF, RM, */RB}); // right motor group
 // IMU port 2
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken
 
-Drive chassis(
+chassisOdom chassis(
 leftMotors, /* left motor group */
 rightMotors, /* right motor group */
 inert, /* inertial sensor port here */
@@ -93,16 +93,14 @@ void competition_initialize() {}
  */
 void autonomous() { // Start our odometry thread.
     // The odometry loop will run in the background while moving.
-
-	
     // Spin our drivetrain forward for 2 seconds.
     leftMotors.move(127);
 	rightMotors.move(127);
 
     pros::delay(1000);
+	leftMotors.brake();
+	rightMotors.brake();
 
-    leftMotors.move(-127);
-	rightMotors.move(-127);
     // Print where we ended up on the coordinate plane onto the brain screen.
 }
 
@@ -120,15 +118,11 @@ void autonomous() { // Start our odometry thread.
  * operator control task will be stopped. Re-enabling the robot will restart the
  * task, not resume it from where it left off.
  */
+
 void opcontrol() {
-	// pros::Controller master(pros::E_CONTROLLER_MASTER);
-	// pros::Motor left_mtr(-11);
-	// pros::Motor right_mtr(20);
 	autonomous();
 	while (true) {
-		pros::lcd::print(0, "%d %d %d", (pros::lcd::read_buttons() & LCD_BTN_LEFT) >> 2,
-		                 (pros::lcd::read_buttons() & LCD_BTN_CENTER) >> 1,
-		                 (pros::lcd::read_buttons() & LCD_BTN_RIGHT) >> 0);
+
 		// int left = master.get_analog(ANALOG_LEFT_Y);
 		// int right = master.get_analog(ANALOG_RIGHT_Y);
 
