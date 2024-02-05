@@ -6,16 +6,15 @@ class chassisOdom{
         double trackWidth;
         float drive_in_to_deg_ratio;
         double start_heading;
-        void odometry();  
         double x = 0;
         double y = 0;
     public: 
-        pros::Motor_Group& leftMotors;
-        pros::Motor_Group& rightMotors;
+        pros::Motor& leftMotor;
+        pros::Motor& rightMotor;
         pros::IMU& IMU;
         chassisOdom(
-        pros::Motor_Group& leftMotors,
-        pros::Motor_Group& rightMotors,
+        pros::Motor& leftMotor,
+        pros::Motor& rightMotor,
         pros::IMU& IMU,
         double wheel_diameter,
         double wheel_ratio, 
@@ -32,5 +31,6 @@ class chassisOdom{
         float xCalc(float change_in_distance);
         float yCalc(float change_in_distance);
         float updatePos(float previous_distance_traveled);
+        void odometry();
 };
 
