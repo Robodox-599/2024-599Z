@@ -9,13 +9,13 @@ class chassisOdom{
         double x = 0;
         double y = 0;
     public: 
-        pros::Motor& leftMotor;
-        pros::Motor& rightMotor;
-        pros::IMU& IMU;
+        std::shared_ptr<pros::Motor> leftMotor;
+        std::shared_ptr<pros::Motor> rightMotor;
+        std::shared_ptr<pros::IMU> IMU;
         chassisOdom(
-        pros::Motor& leftMotor,
-        pros::Motor& rightMotor,
-        pros::IMU& IMU,
+        const pros::Motor& leftMotor,
+        const pros::Motor& rightMotor,
+        const pros::IMU& IMU,
         double wheel_diameter,
         double wheel_ratio, 
         double trackWidth,
@@ -26,11 +26,10 @@ class chassisOdom{
         float distance_encoder_position();
         float yVal();
         float xVal();
-        float resetEncoders();
-        float lcdOut();
-        float xCalc(float change_in_distance);
-        float yCalc(float change_in_distance);
-        float updatePos(float previous_distance_traveled);
+        void resetEncoders();
+        void lcdOut();
+        void xCalc(float change_in_distance);
+        void yCalc(float change_in_distance);
         void odometry();
 };
 

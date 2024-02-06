@@ -17,8 +17,8 @@ pros::Motor R(20, pros::E_MOTOR_GEARSET_06); // right back motor.
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken
 
 chassisOdom chassis(
-	L, /* left motor group */
-	R, /* right motor group */
+	L,
+	R,
 	inert, /* inertial sensor port here */
 	2.75, /* wheel diameter*/
 	0.75, /*gear ratio after */
@@ -88,13 +88,14 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-	// chassis.odometry();
-	pros::delay(1000);
-    R.move(127);
-	L.move(127);
+    chassis.odometry();
     pros::delay(1000);
-	R.brake();
-	L.brake();
+    R.move(127);
+    L.move(127);
+    pros::delay(1000);
+    R.brake();
+    L.brake();
+    while(true){};
 }
 
 
@@ -114,14 +115,4 @@ void autonomous() {
 
 void opcontrol() {
 	autonomous();
-	PRINT("hello");
-	while (true) {
-
-		// int left = master.get_analog(ANALOG_LEFT_Y);
-		// int right = master.get_analog(ANALOG_RIGHT_Y);
-
-		// left_mtr = left;
-		// right_mtr = right;
-		pros::delay(20);
-	}
 }
