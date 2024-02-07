@@ -2,6 +2,75 @@
 // Robot Configuration:
 // [Name]               [Type]        [Port(s)]
 // Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      15              
+// RotationSensor       rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPistons         digital_out   D               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      15              
+// RotationSensor       rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPistonLeft      digital_out   A               
+// climbPistons         digital_out   D               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      15              
+// RotationSensor       rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPistonLeft      digital_out   A               
+// flapsPistonRight     digital_out   B               
+// climbPistons         digital_out   D               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      15              
+// RotationSensor       rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
 // LB                   motor         13              
 // RB                   motor         12              
 // LF                   motor         11              
@@ -120,16 +189,20 @@ void tankDrive(float leftIn, float rightIn){
 /* This is the tank drive function. This uses the inputs passed in as parameters to drive the left or right motors. Overall this function was created in order to create modular code throughout the program.*/
   if (!(leftIn == 0)){
     LB.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
+    LM.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
     LF.spin(forward, (leftIn), percent); // uses parameters as input to determine the speed in percent for the motor
   } else {
     LB.stop(brakeType::brake);
+    LM.stop(brakeType::brake);
     LF.stop(brakeType::brake);
   }
    if (!(rightIn == 0)){
+    RM.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
     RB.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
     RF.spin(forward, (rightIn), percent); // uses parameters as input to determine the speed in percent for the motor
    } else {
     RB.stop(brakeType::brake);
+    RM.stop(brakeType::brake);
     RF.stop(brakeType::brake);
    }
 }
@@ -175,10 +248,6 @@ void tankDriveControl(float leftIn, float rightIn){
  /*After deadzones are calculated, these new Values will be passed into the tankDrive function in order to drive the robot*/
  tankDrive(leftVal, rightVal);
 }
-void flapsPistons(bool val){
-  flapsPistonLeft.set(val);
-  flapsPistonRight.set(val);
-}
 void toggleFlaps(){
 /*This is the toggleFlaps function, it takes in no parameters but uses the value of the flapsToggled in
 order to determine if the flapsPiston should be set to true or false. It is called in the main function
@@ -187,11 +256,11 @@ check the state of the flapsToggled*/
  flapsToggled = !flapsToggled; // inverses state of flapsToggled
  if (flapsToggled){
    //if flapsToggled is true then it will switch the wedge piston to be the true
-   flapsPistons(true);
- } else{
+  flapsPiston.set(true);
+   } else{
    //if flapsToggled is false then it will switch the wedge piston to be the false
-   flapsPistons(false);
- }
+  flapsPiston.set(false);
+  }
 }
 void toggleclimb(){
 /*This is the toggleclimb function, it takes in no parameters but uses the value of the climbToggled in
@@ -201,10 +270,10 @@ check the state of the climbToggled*/
  climbToggled = !climbToggled; // inverses state of climbToggled
  if (climbToggled){
    //if climbToggled is true then it will switch the climb pistons to be the true
-   climbPistons.set(true);
+   climbPiston.set(true);
  } else{
    //if climbToggled is false then it will switch the climb pistons to be the false
-   climbPistons.set(false);
+   climbPiston.set(false);
  }
 }
 /*                         End Function Declarations                                             */
@@ -222,7 +291,7 @@ void usercontrol(void) {
     Controller1.ButtonB.pressed(toggleFlaps); // calls the toggle function for the flaps when the button is pressed
     //intake controls
     intakeControls();
-   
+    Controller1.ButtonY.pressed(toggleclimb);
     wait(20, msec); 
   }
 }

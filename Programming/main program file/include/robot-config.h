@@ -10,13 +10,12 @@ extern motor LF;
 extern motor RF;
 extern motor kickerMotor;
 extern motor intakeMotor;
-extern digital_out flapsPistonLeft;
-extern digital_out flapsPistonRight;
-extern limit kickerSwitch;
-extern digital_out climbPistons;
+extern digital_out flapsPiston;
+extern digital_out climbPiston;
 extern motor LM;
 extern motor RM;
 extern inertial IMU;
+extern rotation RotationSensor;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

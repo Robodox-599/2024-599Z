@@ -22,8 +22,8 @@ void default_constants(){
 motor_group DriveL = motor_group(LB, LM, LF);
 motor_group DriveR = motor_group(RB, RM, RF);
 void wings(bool val){
-  flapsPistonLeft.set(val);
-  flapsPistonRight.set(val);
+  // flapsPistonLeft.set(val);
+  // flapsPistonRight.set(val);
 }
 void drive_percent(float per){ 
   DriveL.spin(fwd, per, percent);
@@ -62,9 +62,9 @@ void e_Off(){
   chassis.drive_distance(-30); // chassis drives backwards till in front of matchload zone
   chassis.turn_to_angle(225); // chassis turns around to let wings access matchload zone
   outake(); // outakes climb triball
-  flapsPistonLeft.set(true); // opens wing to flick out matchload triball
+  // flapsPistonLeft.set(true); // opens wing to flick out matchload triball
   chassis.drive_distance(15); // drives into matchload triball with wing extended to flick out matchload triball
-  flapsPistonLeft.set(false); // closes left wing
+  // flapsPistonLeft.set(false); // closes left wing
   chassis.turn_to_angle(270); // turns robot around to use back of robot to push into goals
   corner_score(2); // does standard corner scoring procedure (driving back and forth at full speed to score)
   chassis.turn_to_angle(0); // reset back to orignal position
@@ -120,17 +120,17 @@ void q_Off(){
 void e_Def(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_25
   outake(); // spin outake to not posses any triball
-  flapsPistonLeft.set(true); // opens wing to flick out matchload triball
+  // flapsPistonLeft.set(true); // opens wing to flick out matchload triball
   chassis.drive_distance(5); // drives into matchload triball with wing extended to flick out matchload triball
-  flapsPistonLeft.set(false); // closes wing
+  // flapsPistonLeft.set(false); // closes wing
   chassis.drive_distance(-22); // drives backwards and scores alliance triball
   chassis.drive_distance(12); // drives back forwards 
   chassis.turn_to_angle(270); // turns to face long bar triballs
   chassis.drive_distance(50); // drives toward long bar triballs
-  flapsPistonRight.set(true); // opens wedge wing
+  // flapsPistonRight.set(true); // opens wedge wing
   chassis.turn_to_angle(315); // turns to face long bar triballs
   chassis.drive_distance(30); // disrupts with wedge wings
-  flapsPistonRight.set(false); // closes wedge wing
+  // flapsPistonRight.set(false); // closes wedge wing
   chassis.drive_distance(-30); // drives back 
   chassis.turn_to_angle(270); // turns to go back to matchload zone
   chassis.drive_distance(-50); // drives back to matchload zone
@@ -145,13 +145,13 @@ void q_Def(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_20
   intake(); // spin outake to not posses any triball
   chassis.drive_distance(-5);
-  flapsPistonRight.set(true); // opens wing to flick out matchload triball
+  // flapsPistonRight.set(true); // opens wing to flick out matchload triball
   wait(500, msec);
   chassis.drive_distance(10);
   chassis.drive_distance(-4);
   wait(400,  msec);
   chassis.drive_distance(5);
-  flapsPistonRight.set(false); // closes wing
+  // flapsPistonRight.set(false); // closes wing
   chassis.drive_distance(5);
   chassis.turn_to_angle(315); // turn to climb bar
   chassis.drive_distance(30); // drive to climb bar to get AWP
@@ -162,7 +162,7 @@ void q_Def(){
 void auto_skills(){
   outake();
   wait(30,seconds);
-  flapsPistonLeft.set(true);
+  // flapsPistonLeft.set(true);
    chassis.drive_distance(50);
    chassis.drive_distance(-50);
 
