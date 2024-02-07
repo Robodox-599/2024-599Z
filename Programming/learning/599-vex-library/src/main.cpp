@@ -113,6 +113,12 @@ void autonomous() {
  * task, not resume it from where it left off.
  */
 
+
 void opcontrol() {
-	autonomous();
+	pros::Controller master(pros::E_CONTROLLER_MASTER);
+	while(true){
+  		if(master.get_digital_new_press(DIGITAL_Y))
+    		autonomous();
+		}
 }
+

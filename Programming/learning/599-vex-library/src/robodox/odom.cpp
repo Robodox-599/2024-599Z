@@ -94,12 +94,10 @@ void chassisOdom::odometry() {
     // previous_distance_traveled = distance_encoder_position();
     // pros::lcd::print(0, "X Position: %3f", xVal());
     // pros::lcd::print( 1, "Y Position: %3f", yVal());
-    PRINT("X Position: " + std::to_string(xVal()));
-    PRINT("Y Position: " + std::to_string(yVal()));  
-    // PRINT("LEFT Position: " + std::to_string(get_left_position_in()));  
-    // PRINT("RIGHT Position: " + std::to_string(get_right_position_in()));
-
+    printf("X Position: %lf", std::to_string(xVal()));
+    printf("Y Position: %lf", std::to_string(yVal()));  
+    printf("Encoder Position: %lf", std::to_string(distance_encoder_position()));
+    printf("IMU Position: %lf", std::to_string(get_absolute_heading()));
     pros::delay(10);
   }
-  PRINT("hello");
 }
