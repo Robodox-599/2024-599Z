@@ -80,24 +80,30 @@ void chassisOdom::yCalc(float change_in_distance){
 void chassisOdom::odometry() {
   // leftMotor.tare_position();
   // rightMotor.tare_position();
-  resetEncoders();
+  // resetEncoders();
   double previous_distance_traveled = 0;
+  leftMotor->tare_position();
+  rightMotor->tare_position();
   while (true) {   
     double change_in_distance = distance_encoder_position() - previous_distance_traveled;
-    xCalc(change_in_distance);
-    yCalc(change_in_distance);
+    // xCalc(change_in_distance);
+    // yCalc(change_in_distance);
     previous_distance_traveled = distance_encoder_position();
     // pros::lcd::print(0, "X Position: %3f", xVal());
     // pros::lcd::print( 1, "Y Position: %3f", yVal());
-    // x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
-    // y += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
-    // previous_distance_traveled = distance_encoder_position();
+    x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+    y += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+    previous_distance_traveled = distance_encoder_position();
     // pros::lcd::print(0, "X Position: %3f", xVal());
     // pros::lcd::print( 1, "Y Position: %3f", yVal());
-    printf("X Position: %lf", std::to_string(xVal()));
-    printf("Y Position: %lf", std::to_string(yVal()));  
-    printf("Encoder Position: %lf", std::to_string(distance_encoder_position()));
-    printf("IMU Position: %lf", std::to_string(get_absolute_heading()));
+    printf("X Position: %lf/n", xVal());
+    printf("Y Position: %lf/n", yVal());  
+    // double rightVal += rightMotor->
+
+    // double change_in_distance = 
+    // printf("Left Position: %lf/n", leftMotor->get_position());
+    // printf("Right Position: %lf/n", rightMotor->get_position());
+    // printf("IMU Position: %lf/n", IMU->get_rotation());
     pros::delay(10);
   }
 }

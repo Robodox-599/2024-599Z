@@ -88,14 +88,14 @@ void competition_initialize() {}
  * from where it left off.
  */
 void autonomous() {
-    chassis.odometry();
     pros::delay(1000);
     R.move(127);
     L.move(127);
-    pros::delay(1000);
-    R.brake();
-    L.brake();
-    while(true){};
+    // pros::delay(1000);
+    // R.brake();
+    // L.brake();
+    while(true){
+	};
 }
 
 
@@ -116,9 +116,11 @@ void autonomous() {
 
 void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	while(true){
-  		if(master.get_digital_new_press(DIGITAL_Y))
+	while (true){
+  		if (master.get_digital_new_press(DIGITAL_Y)){
     		autonomous();
-		}
+			}
+		pros::delay(10);
+	}
 }
 
