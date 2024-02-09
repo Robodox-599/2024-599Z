@@ -84,6 +84,8 @@ void e_Off(){
 
 void q_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.p
+  outake();
+  wait(250, msec);
   intake(); //intake spins to hold alliance ball
   chassis.drive_distance(35); // chassis drives forward till in front of goal
   chassis.turn_to_angle(90, 8); // chassis turns to face goal
@@ -143,6 +145,8 @@ void e_Def(){
 
 void q_Def(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_20
+  outake();
+  wait(250, msec);
   intake(); // spin outake to not posses any triball
   chassis.drive_distance(-5);
   // flapsPistonRight.set(true); // opens wing to flick out matchload triball

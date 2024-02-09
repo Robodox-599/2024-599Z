@@ -20,7 +20,7 @@ digital_out climbPiston = digital_out(Brain.ThreeWirePort.B);
 motor LM = motor(PORT9, ratio6_1, true);
 motor RM = motor(PORT1, ratio6_1, false);
 inertial IMU = inertial(PORT15);
-rotation RotationSensor = rotation(PORT4, false);
+rotation rot = rotation(PORT4, false);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable

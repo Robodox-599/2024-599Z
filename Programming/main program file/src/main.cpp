@@ -13,6 +13,23 @@
 // LM                   motor         9               
 // RM                   motor         1               
 // IMU                  inertial      15              
+// rot                  rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      15              
 // RotationSensor       rotation      4               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 // ---- START VEXCODE CONFIGURED DEVICES ----
@@ -143,17 +160,16 @@ bool flapsToggled = false; /*Flaps toggle variable used to track the state of th
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------*/
 /*                           Function Declaration Below                                                                                           */
-
 void kickerControl(){
  /*This is the Kicker Control Function, takes in no parameters*/
  if (Controller1.ButtonL1.pressing()){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(forward, 65, velocityUnits::pct); 
-  } else if(Controller1.ButtonL2.pressing()){
-    /* cranks the kicker, till the limit switch is being pressed. */
-    kickerMotor.spinToPosition(65, degrees);
- } else {
+    kickerMotor.spin(forward, 45, velocityUnits::pct); 
+ } else if (rot.angle() != 55){
+    kickerMotor.spin(forward, 45, velocityUnits::pct); 
+ }
+ else {
     // if there is no input then it will brake the kicker motor to reduce strain on motor
 	  /*brakes motor using coast*/
     kickerMotor.stop(brakeType:: coast); 
@@ -281,6 +297,7 @@ check the state of the climbToggled*/
 
 
 void usercontrol(void) {
+  rot.resetPosition(); 
   while (1) {
     //drive controls
     //arcadeDriveControl(Controller1.Axis3.value(), Controller1.Axis1.value());

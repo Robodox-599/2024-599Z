@@ -15,7 +15,7 @@ extern digital_out climbPiston;
 extern motor LM;
 extern motor RM;
 extern inertial IMU;
-extern rotation RotationSensor;
+extern rotation rot;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.
