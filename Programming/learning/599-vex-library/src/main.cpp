@@ -118,8 +118,13 @@ void opcontrol() {
 	pros::Controller master(pros::E_CONTROLLER_MASTER);
 	while (true){
   		if (master.get_digital_new_press(DIGITAL_Y)){
-    		autonomous();
+			R.move(127);
+    		L.move(127);
 			}
+		else if (master.get_digital_new_press(DIGITAL_X)){
+			R.move(0);
+   			L.move(0);
+		}
 		pros::delay(10);
 	}
 }

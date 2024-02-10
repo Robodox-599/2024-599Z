@@ -166,7 +166,7 @@ void kickerControl(){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
     kickerMotor.spin(forward, 45, velocityUnits::pct); 
- } else if (rot.angle() != 55){
+ } else if (!(50 < rot.angle() < 60)){
     kickerMotor.spin(forward, 45, velocityUnits::pct); 
  }
  else {
