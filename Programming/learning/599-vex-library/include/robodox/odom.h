@@ -8,25 +8,25 @@ class chassisOdom{
         double start_heading;
         double x = 0;
         double y = 0;
+        double previous_distance_traveled = 0;
     public: 
-        std::shared_ptr<pros::Motor> leftMotor;
-        std::shared_ptr<pros::Motor> rightMotor;
+        std::shared_ptr<pros::Motor_Group> leftMotors;
+        std::shared_ptr<pros::Motor_Group> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
         chassisOdom(
-        const pros::Motor& leftMotor,
-        const pros::Motor& rightMotor,
+        const pros::Motor_Group& leftMotors,
+        const pros::Motor_Group& rightMotors,
         const pros::IMU& IMU,
         double wheel_diameter,
         double wheel_ratio, 
         double trackWidth,
         double start_heading);
         float get_absolute_heading();
-        float get_left_position_in();
-        float get_right_position_in();
-        float distance_encoder_position();
+        float average_encoder_position();
         float yVal();
         float xVal();
-        void resetEncoders();
+        float distance_traveled();
+        void resetOdom();
         void lcdOut();
         void xCalc(float change_in_distance);
         void yCalc(float change_in_distance);
