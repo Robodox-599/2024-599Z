@@ -19,7 +19,7 @@ digital_out flapsPiston = digital_out(Brain.ThreeWirePort.A);
 digital_out climbPiston = digital_out(Brain.ThreeWirePort.B);
 motor LM = motor(PORT9, ratio6_1, true);
 motor RM = motor(PORT1, ratio6_1, false);
-inertial IMU = inertial(PORT15);
+inertial IMU = inertial(PORT12);
 rotation rot = rotation(PORT4, false);
 
 // VEXcode generated functions

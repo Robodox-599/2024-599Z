@@ -12,6 +12,23 @@
 // climbPiston          digital_out   B               
 // LM                   motor         9               
 // RM                   motor         1               
+// IMU                  inertial      12              
+// rot                  rotation      4               
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
 // IMU                  inertial      15              
 // rot                  rotation      4               
 // ---- END VEXCODE CONFIGURED DEVICES ----
@@ -114,7 +131,7 @@ motor_group(LB, LM, LF), /* left motor group */
 
 motor_group(RB, RM, RF), /* right motor group */
 
-PORT3, /* inertial sensor port here */
+PORT12, /* inertial sensor port here */
 
 2.75, /* wheel diameter*/
 
@@ -129,13 +146,15 @@ bool auto_started = false;
 void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
+  IMU.calibrate();
   default_constants();
 }
 
 void autonomous(void) {
   // autos will go here
-  //meer make better auto selector later :sob:
-  
+  if(!IMU.isCalibrating()){
+  winpoint();
+  }  
 }
 
 /*---------------------------------------------------------------------------*/

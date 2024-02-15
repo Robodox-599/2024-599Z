@@ -49,9 +49,22 @@ void corner_score(int iterate){
   }
 }
 // autos will start below 
+
+void winpoint(){
+  intake();
+  climbPiston.set(true);
+  chassis.drive_distance(-25);
+  climbPiston.set(false);
+  chassis.turn_to_angle(0);
+  chassis.drive_distance(25);
+  chassis.turn_to_angle(315);
+  chassis.drive_distance(30);
+  outake();
+}
+
 void PID_test(){
   default_constants();
-  chassis.left_swing_to_angle(90);
+  chassis.turn_to_angle(90);
 }
 void e_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_0
