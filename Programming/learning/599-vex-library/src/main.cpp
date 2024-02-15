@@ -9,16 +9,19 @@ pros::Controller controller(pros::E_CONTROLLER_MASTER);
 // drive motors
 pros::Motor L(-13, pros::E_MOTOR_GEARSET_06); // left front motor. reversed 
 pros::Motor R(20, pros::E_MOTOR_GEARSET_06); // right back motor.
+
 // motor groups
-//pros::MotorGroup leftMotors({L}); // left motor group
-//pros::MotorGroup rightMotors({R}); // right motor group
+pros::MotorGroup leftMotors({L}); // left motor group
+pros::MotorGroup rightMotors({R}); // right motor group
 
 // IMU port 2
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken
 
 chassisOdom chassis(
-	L,
-	R,
+	// L,
+	// R,
+	leftMotors,
+	rightMotors,
 	inert, /* inertial sensor port here */
 	2.75, /* wheel diameter*/
 	0.75, /*gear ratio after */

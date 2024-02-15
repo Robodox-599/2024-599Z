@@ -1,9 +1,7 @@
 #include "robodox/PRELUDE.hpp"
+#include "robodox/PID.h"
 #include "robodox/odom.h"
 #include "robodox/drive.h"
-#include "robodox/PID.h"
-
-
 PID::PID(float error, float kp, float ki, float kd, float starti) :
   error(error),
   kp(kp),
