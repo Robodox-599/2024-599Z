@@ -7,12 +7,12 @@
 pros::Controller controller(pros::E_CONTROLLER_MASTER);
 
 // drive motors
-pros::Motor L(-13, pros::E_MOTOR_GEARSET_06); // left front motor. reversed 
-pros::Motor R(20, pros::E_MOTOR_GEARSET_06); // right back motor.
+pros::Motor L(15, pros::E_MOTOR_GEARSET_06, true); // left front motor. reversed 
+pros::Motor R(19, pros::E_MOTOR_GEARSET_06); // right back motor.
 
 // motor groups
-pros::MotorGroup leftMotors({L}); // left motor group
-pros::MotorGroup rightMotors({R}); // right motor group
+std::shared_ptr<pros::MotorGroup> leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{L});
+std::shared_ptr<pros::MotorGroup> rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{R});
 
 // IMU port 2
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken

@@ -14,6 +14,42 @@
 // RM                   motor         1               
 // IMU                  inertial      12              
 // rot                  rotation      4               
+// distanceSensor       distance      21              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      12              
+// rot                  rotation      4               
+// distanceSensor       distance      13              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
+// kickerMotor          motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      12              
+// rot                  rotation      4               
 // ---- END VEXCODE CONFIGURED DEVICES ----
 // ---- START VEXCODE CONFIGURED DEVICES ----
 // Robot Configuration:
@@ -147,6 +183,7 @@ void pre_auton(void) {
   // Initializing Robot Configuration. DO NOT REMOVE!
   vexcodeInit();
   IMU.calibrate();
+  rot.resetPosition(); 
   default_constants();
 }
 
@@ -179,15 +216,17 @@ bool flapsToggled = false; /*Flaps toggle variable used to track the state of th
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------*/
 /*                           Function Declaration Below                                                                                           */
-void kickerControl(){
+void kickerControl(float angle, float speed){
  /*This is the Kicker Control Function, takes in no parameters*/
  if (Controller1.ButtonL1.pressing()){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(forward, 45, velocityUnits::pct); 
- } else if (!(50 < rot.angle() < 60)){
-    kickerMotor.spin(forward, 45, velocityUnits::pct); 
- }
+    kickerMotor.spin(forward, 21, velocityUnits::pct); 
+ }else if(distanceSensor.objectDistance(inches) < 0.5 ){
+    kickerMotor.spin(forward, 21, velocityUnits::pct); 
+ } else if (!(rot.angle() < 10)){
+    kickerMotor.spin(forward, 10, velocityUnits::pct); 
+  } 
  else {
     // if there is no input then it will brake the kicker motor to reduce strain on motor
 	  /*brakes motor using coast*/
@@ -316,13 +355,12 @@ check the state of the climbToggled*/
 
 
 void usercontrol(void) {
-  rot.resetPosition(); 
   while (1) {
     //drive controls
     //arcadeDriveControl(Controller1.Axis3.value(), Controller1.Axis1.value());
     tankDriveControl(Controller1.Axis3.value(), Controller1.Axis2.value());
     //kicker controls
-    kickerControl();
+    kickerControl(10,50);
     // flaps controls
     Controller1.ButtonB.pressed(toggleFlaps); // calls the toggle function for the flaps when the button is pressed
     //intake controls
