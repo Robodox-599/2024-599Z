@@ -17,17 +17,7 @@ std::shared_ptr<pros::MotorGroup> rightMotors = std::make_shared<pros::MotorGrou
 // IMU port 2
 pros::IMU inert(21); // change number in parenthesis to change port, make sure it does not go to a port already taken
 
-chassisOdom chassis(
-	// L,
-	// R,
-	leftMotors,
-	rightMotors,
-	inert, /* inertial sensor port here */
-	2.75, /* wheel diameter*/
-	0.75, /*gear ratio after */
-	10.5, /* track width */
-	90 /* start heading */
-);
+
 
 /**
  * A callback function for LLEMU's center button.

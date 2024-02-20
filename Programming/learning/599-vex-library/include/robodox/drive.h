@@ -7,23 +7,18 @@ class Drive {
         float drive_in_to_deg_ratio;
         double start_heading;
     public: 
-        std::shared_ptr<pros::Motor_Group> leftMotors;
-        std::shared_ptr<pros::Motor_Group> rightMotors;
+         public: 
+        std::shared_ptr<pros::MotorGroup> leftMotors;
+        std::shared_ptr<pros::MotorGroup> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
-        Drive::Drive(
-          std::shared_ptr<pros::MotorGroup> leftMotors,
-          std::shared_ptr<pros::MotorGroup> rightMotors,
-          const pros::IMU& IMU,  
-          double wheel_diameter,
-          double wheel_ratio):
-            wheel_diameter(wheel_diameter),
-            wheel_ratio(wheel_ratio),
-            drive_in_to_deg_ratio(wheel_ratio/360.0*M_PI*wheel_diameter),
-            leftMotors(leftMotors),
-            rightMotors(rightMotors),
-            IMU(std::make_shared<pros::IMU>(IMU))
-            {
-            }
+        Drive(
+        std::shared_ptr<pros::MotorGroup> leftMotors,
+        std::shared_ptr<pros::MotorGroup> rightMotors,
+        const pros::IMU& IMU,
+        double wheel_diameter,
+        double wheel_ratio, 
+        double trackWidth,
+        double start_heading);
             float turn_max_voltage;
             float turn_kp;
             float turn_ki;
@@ -94,10 +89,8 @@ class Drive {
             void left_swing_to_angle(float angle, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti);
             void right_swing_to_angle(float angle);
             void right_swing_to_angle(float angle, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti);
-            
-            //   chassisOdom chassisOdom;
-            void set_coordinates(float X_position, float Y_position, float orientation_deg);
-            void set_heading(float orientation_deg);
+            chassisOdom odom;
+            void resetOdometry();
             float get_X_position();
             float get_Y_position();
             
