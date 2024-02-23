@@ -219,8 +219,7 @@ void Drive::drive_distance(float distance, float heading, float drive_max_voltag
 }
 
 void Drive::left_swing_to_angle(float angle, float swing_max_voltage, float swing_settle_error, float swing_settle_time, float swing_timeout, float swing_kp, float swing_ki, float swing_kd, float swing_starti){
-  /*
-This method, Drive::left_swing_to_angle, aims to turn the robot towards a specific angle using a PID controller specifically designed for a left swing turn. Let's break down this method:*/
+  /*This method, Drive::left_swing_to_angle, aims to turn the robot towards a specific angle using a PID controller specifically designed for a left swing turn. Let's break down this method:*/
   desired_heading = angle;
   PID swingPID(reduce_negative_180_to_180(angle - get_absolute_heading()), swing_kp, swing_ki, swing_kd, swing_starti, swing_settle_error, swing_settle_time, swing_timeout);
   while(swingPID.settled() == false){
@@ -249,3 +248,4 @@ void Drive::right_swing_to_angle(float angle, float swing_max_voltage, float swi
   DriveL.stop(hold);
   DriveR.stop(hold);
 }
+

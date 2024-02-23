@@ -3,17 +3,9 @@
 #include "robodox/odom.h"
 #include "robodox/drive.h"
 
-float reduce_0_to_360(float angle) {
-  /* Ensures angle is within the range [0, 360) degrees. Loops until the angle falls within the range.*/
-  while(!(angle >= 0 && angle < 360)) {
-    if(angle < 0) { angle += 360; }   // Shifts negative angles to positive by adding 360 degrees
-    if(angle >= 360) { angle -= 360; } // Reduces angles exceeding 360 degrees by subtracting 360 degrees
-  }
-  return angle; // Returns the adjusted angle within the range [0, 360)
-}
 chassisOdom::chassisOdom(
-    const pros::Motor_Group& leftMotors,
-    const pros::Motor_Group& rightMotors,
+    std::shared_ptr<pros::MotorGroup> leftMotors,
+    std::shared_ptr<pros::MotorGroup> rightMotors,
     const pros::IMU& IMU,  
     double wheel_diameter,
     double wheel_ratio,
@@ -23,8 +15,8 @@ chassisOdom::chassisOdom(
   wheel_ratio(wheel_ratio),
   drive_in_to_deg_ratio(wheel_ratio/360.0*M_PI*wheel_diameter),
   start_heading(start_heading),
-  leftMotors(std::make_shared<pros::Motor_Group>(leftMotors)),
-  rightMotors(std::make_shared<pros::Motor_Group>(rightMotors)),
+  leftMotors(leftMotors),
+  rightMotors(rightMotors),
   IMU(std::make_shared<pros::IMU>(IMU))
 {
 pros::Task odomTask([this]{this->odometry();});
@@ -40,12 +32,12 @@ float chassisOdom::average_encoder_position(){
   float encoder_position = 0 ;
   std::vector<double> left_positions = leftMotors->get_positions();
   std::vector<double> right_positions = rightMotors->get_positions();
-  for(const int& i : right_positions){
-  encoder_position += right_positions[i];
-  } 
-  for(const int& i : left_positions){
-  encoder_position += left_positions[i];
-  } 
+  for(double p : right_positions) {
+  encoder_position += p;
+  }
+  for(double p : left_positions) {
+  encoder_position += p;
+  }
   float avg_encoder_position = encoder_position /2;
   return (avg_encoder_position);
 }
@@ -76,7 +68,7 @@ void chassisOdom::xCalc(float change_in_distance){
   x += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
 }
 void chassisOdom::yCalc(float change_in_distance){
-  y += change_in_distance * std::cos(get_absolute_heading() * (M_PI / 180));
+  y += change_in_distance * std::sin(get_absolute_heading() * (M_PI / 180));
 }
 float chassisOdom::distance_traveled(){
   return(average_encoder_position() * 0.75 / 360.0 * M_PI * 2.75);
@@ -87,6 +79,7 @@ void chassisOdom::odometry() {
   resetOdom();
   while (true) {
     if (!(IMU->is_calibrating())){
+      // printf("rightMotors->get_ports().size(): %i\n", rightMotors->get_ports().size());
       double change_in_distance = distance_traveled() - previous_distance_traveled; 
       xCalc(change_in_distance);
       yCalc(change_in_distance);

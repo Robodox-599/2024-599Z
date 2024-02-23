@@ -10,12 +10,12 @@ class chassisOdom{
         double y = 0;
         double previous_distance_traveled = 0;
     public: 
-        std::shared_ptr<pros::Motor_Group> leftMotors;
-        std::shared_ptr<pros::Motor_Group> rightMotors;
+        std::shared_ptr<pros::MotorGroup> leftMotors;
+        std::shared_ptr<pros::MotorGroup> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
         chassisOdom(
-        const pros::Motor_Group& leftMotors,
-        const pros::Motor_Group& rightMotors,
+        std::shared_ptr<pros::MotorGroup> leftMotors,
+        std::shared_ptr<pros::MotorGroup> rightMotors,
         const pros::IMU& IMU,
         double wheel_diameter,
         double wheel_ratio, 

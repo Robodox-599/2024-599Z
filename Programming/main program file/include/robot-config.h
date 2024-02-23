@@ -16,6 +16,7 @@ extern motor LM;
 extern motor RM;
 extern inertial IMU;
 extern rotation rot;
+extern distance distanceSensor;
 
 /**
  * Used to initialize code/tasks/devices added using tools in VEXcode Pro.

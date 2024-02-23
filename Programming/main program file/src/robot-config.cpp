@@ -21,6 +21,7 @@ motor LM = motor(PORT9, ratio6_1, true);
 motor RM = motor(PORT1, ratio6_1, false);
 inertial IMU = inertial(PORT20);
 rotation rot = rotation(PORT4, false);
+distance distanceSensor = distance(PORT21);
 
 // VEXcode generated functions
 // define variable for remote controller enable/disable
