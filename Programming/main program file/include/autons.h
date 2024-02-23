@@ -13,4 +13,5 @@ void q_Def();
 void e_Def();
 void auto_skills();
 void winpoint();
+void auto_setup();
 //update autos here later
