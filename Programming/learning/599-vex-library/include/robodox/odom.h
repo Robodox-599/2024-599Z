@@ -13,6 +13,7 @@ class chassisOdom{
         std::shared_ptr<pros::MotorGroup> leftMotors;
         std::shared_ptr<pros::MotorGroup> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
+        chassisOdom();
         chassisOdom(
         std::shared_ptr<pros::MotorGroup> leftMotors,
         std::shared_ptr<pros::MotorGroup> rightMotors,
