@@ -21,7 +21,17 @@ Drive::Drive(
         {        
             leftMotors->set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
             rightMotors->set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
+            chassisOdom odom(
+                leftMotors,
+                rightMotors,
+                IMU, /* inertial sensor port here */
+                wheel_diameter, /* wheel diameter*/
+                wheel_ratio, /*gear ratio after */
+                trackWidth, /* track width */
+                start_heading /* start heading */
+            );
         }
+        
         void Drive::drive_voltage(float left, float right){
             leftMotors->move(left);
             rightMotors->move(right);
@@ -205,11 +215,11 @@ Drive::Drive(
         void Drive::resetOdometry(){
             odom.resetOdom();
         }
-        float Drive::get_X_position(){
+        float Drive::x_pos(){
             return(odom.xVal());
         }
         
-        float Drive::get_Y_position(){
+        float Drive::y_pos(){
             return(odom.yVal());
         }
         
@@ -226,6 +236,29 @@ Drive::Drive(
         }
         
         
+        void Drive::drive_to_point(float X_position, float Y_position, float drive_max_voltage, float heading_max_voltage, float drive_settle_error, float drive_settle_time, float drive_timeout, float drive_kp, float drive_ki, float drive_kd, float drive_starti, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
+            PID drivePID(hypot(X_position-x_pos(),Y_position-y_pos()), drive_kp, drive_ki, drive_kd, drive_starti, drive_settle_error, drive_settle_time, drive_timeout);
+            PID headingPID(neg_180_to_180(deg(atan2(X_position-x_pos(),Y_position-y_pos()))-get_absolute_heading()), heading_kp, heading_ki, heading_kd, heading_starti);
+            while(drivePID.settled() == false){
+                float drive_error = hypot(X_position-x_pos(),Y_position-y_pos());
+                float heading_error = neg_180_to_180(deg(atan2(X_position-x_pos(),Y_position-y_pos()))-get_absolute_heading());
+                float drive_output = drivePID.calculate(drive_error);
+                float heading_scale_factor = cos(rad(heading_error));
+                drive_output*=heading_scale_factor;
+                heading_error = neg_90_to_90(heading_error);
+                float heading_output = headingPID.calculate(heading_error);
+                if (drive_error<drive_settle_error) { heading_output = 0; }
+                drive_output = clamp(drive_output, -fabs(heading_scale_factor)*drive_max_voltage, fabs(heading_scale_factor)*drive_max_voltage);
+                heading_output = clamp(heading_output, -heading_max_voltage, heading_max_voltage);
+
+                drive_voltage(drive_output+heading_output, drive_output-heading_output);
+                pros::delay(10);
+            }
+            desired_heading = get_absolute_heading();
+            leftMotors->brake();
+            rightMotors->brake();
+        }
+        
         void Drive::turn_to_point(float x_pos, float y_pos){
             turn_to_point(x_pos, y_pos, 0, turn_max_voltage, turn_settle_error, turn_settle_time, turn_timeout, turn_kp, turn_ki, turn_kd, turn_starti);
         }
@@ -237,4 +270,16 @@ Drive::Drive(
         void Drive::turn_to_point(float x_pos, float y_pos, float extra_angle_deg, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout){
             turn_to_point(x_pos, y_pos, extra_angle_deg, turn_max_voltage, turn_settle_error, turn_settle_time, turn_timeout, turn_kp, turn_ki, turn_kd, turn_starti);
         }
-        
+        void Drive::turn_to_point(float X_position, float Y_position, float extra_angle_deg, float turn_max_voltage, float turn_settle_error, float turn_settle_time, float turn_timeout, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
+            PID turnPID(neg_180_to_180(deg(atan2(X_position-x_pos(),Y_position-y_pos())) - get_absolute_heading()), turn_kp, turn_ki, turn_kd, turn_starti, turn_settle_error, turn_settle_time, turn_timeout);
+            while(turnPID.settled() == false){
+                float error = neg_180_to_180(deg(atan2(X_position-x_pos(),Y_position-y_pos())) - get_absolute_heading() + extra_angle_deg);
+                float output = turnPID.calculate(error);
+                output = clamp(output, -turn_max_voltage, turn_max_voltage);
+                drive_voltage(output, -output);
+                pros::delay(10);
+            }
+            desired_heading = get_absolute_heading();
+            leftMotors->brake();
+            rightMotors->brake();
+        }

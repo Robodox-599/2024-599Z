@@ -9,8 +9,8 @@ class Drive {
     public:  
         void odomSetup();
         void resetOdometry();
-        float get_X_position();
-        float get_Y_position();
+        float x_pos();
+        float y_pos();
         std::shared_ptr<pros::MotorGroup> leftMotors;
         std::shared_ptr<pros::MotorGroup> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
