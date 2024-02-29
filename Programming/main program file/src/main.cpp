@@ -198,7 +198,7 @@ void autonomous(void) {
   auto_started = true; //Sets the auto_started flag to true, indicating that the autonomous phase has started.
   switch(current_auton_selection){ 
     case 0: //Utilizes a switch-case structure to determine which autonomous routine to execute based on the current_auton_selection variable.
-        if(!IMU.isCalibrating()){ /*winpoint(); q_Def(); e_Def(); e_Off(); */}
+        if(!IMU.isCalibrating()){ /*winpoint(); q_Def(); e_Def(); e_Off(); */ auto_skills();}
       break;    
     case 1:       
         if(!IMU.isCalibrating()){ q_Def(); }
@@ -245,7 +245,7 @@ void kickerControl(){
  if (Controller1.ButtonL1.pressing()){
     /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
     reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(forward, 50, velocityUnits::pct); 
+    kickerMotor.spin(forward, 55, velocityUnits::pct); 
  }else {
     // if there is no input then it will brake the kicker motor to reduce strain on motor
 	  /*brakes motor using coast*/
@@ -261,7 +261,7 @@ check the state of the climbToggled*/
  kickerToggle = !kickerToggle; // inverses state of climbToggled
  if (kickerToggle){
    //if climbToggled is true then it will switch the climb pistons to be the true
-    kickerMotor.spin(forward, 50, velocityUnits::pct); 
+    kickerMotor.spin(forward, 55, velocityUnits::pct); 
  } else{
    //if climbToggled is false then it will switch the climb pistons to be the false
     kickerMotor.stop(brakeType:: coast); 
@@ -410,7 +410,6 @@ void usercontrol(void) {
     Controller1.ButtonX.pressed(toggleclimb);
     skillsSetup();
     wait(10, msec); 
-  
   }
 }
 //main function
