@@ -58,56 +58,95 @@ Drive::Drive(
             return( encoder_position*drive_in_to_deg_ratio);
         }
         
-        void Drive::set_turn_constants(float turn_max_voltage, float turn_kp, float turn_ki, float turn_kd, float turn_starti){
+        void Drive::set_constants(
+            /* Regular Turn Constants Parameters---------------------*/
+            float turn_max_voltage, 
+            float turn_kp, 
+            float turn_ki, 
+            float turn_kd, 
+            float turn_starti, 
+            
+            /* Regular Drive Constants Parameters--------------------*/
+            float drive_max_voltage, 
+            float drive_kp, 
+            float drive_ki, 
+            float drive_kd, 
+            float drive_starti, 
+            
+            /* Swing Turn Constants Parameters-----------------------*/
+            float swing_max_voltage, 
+            float swing_kp, 
+            float swing_ki, 
+            float swing_kd, 
+            float swing_starti, 
+            
+            /*Heading Constants Parameters---------------------------*/
+            float heading_max_voltage, 
+            float heading_kp,
+            float heading_ki, 
+            float heading_kd, 
+            float heading_starti
+            
+        )
+        {
+            
+            /* Regular Turn Constants being set to Parameters-----------*/
             this->turn_max_voltage = turn_max_voltage;
             this->turn_kp = turn_kp;
             this->turn_ki = turn_ki;
             this->turn_kd = turn_kd;
             this->turn_starti = turn_starti;
-        } 
-        
-        void Drive::set_drive_constants(float drive_max_voltage, float drive_kp, float drive_ki, float drive_kd, float drive_starti){
+            
+            /* Regular Drive Constants  being set to Parameters---------*/
             this->drive_max_voltage = drive_max_voltage;
             this->drive_kp = drive_kp;
             this->drive_ki = drive_ki;
             this->drive_kd = drive_kd;
             this->drive_starti = drive_starti;
-        } 
-        
-        void Drive::set_heading_constants(float heading_max_voltage, float heading_kp, float heading_ki, float heading_kd, float heading_starti){
-            this->heading_max_voltage = heading_max_voltage;
-            this->heading_kp = heading_kp;
-            this->heading_ki = heading_ki;
-            this->heading_kd = heading_kd;
-            this->heading_starti = heading_starti;
-        }
-        
-        void Drive::set_swing_constants(float swing_max_voltage, float swing_kp, float swing_ki, float swing_kd, float swing_starti){
+            
+            /*Swing Turn Constants being set to Parameters--------------*/
             this->swing_max_voltage = swing_max_voltage;
             this->swing_kp = swing_kp;
             this->swing_ki = swing_ki;
             this->swing_kd = swing_kd;
             this->swing_starti = swing_starti;
-        } 
+            
+            /*Heading Constants being set to Parameters------------------*/
+            this->heading_max_voltage = heading_max_voltage;
+            this->heading_kp = heading_kp;
+            this->heading_ki = heading_ki;
+            this->heading_kd = heading_kd;
+            this->heading_starti = heading_starti;
+            
+        }
         
-        void Drive::set_turn_exit_conditions(float turn_settle_error, float turn_settle_time, float turn_timeout){
+        void Drive::set_exit_conditions(
+            /*Regular Turn Conditions Parameters----------------------------------*/
+            float turn_settle_error, 
+            float turn_settle_time, 
+            float turn_timeout, 
+            /*Swing Turn Conditions Parameters------------------------------------*/
+            float swing_settle_error, 
+            float swing_settle_time, 
+            float swing_timeout,
+            /*Regular Drive Conditions Parameters---------------------------------*/ 
+            float drive_settle_error, 
+            float drive_settle_time, 
+            float drive_timeout
+        ){
+            /*Regular Turn Conditions being set to Parameters---------------------*/
             this->turn_settle_error = turn_settle_error;
             this->turn_settle_time = turn_settle_time;
             this->turn_timeout = turn_timeout;
-        }
-        
-        void Drive::set_drive_exit_conditions(float drive_settle_error, float drive_settle_time, float drive_timeout){
+            /*Regular Drive Conditions being set to Parameters--------------------*/
             this->drive_settle_error = drive_settle_error;
             this->drive_settle_time = drive_settle_time;
             this->drive_timeout = drive_timeout;
-        }
-        
-        void Drive::set_swing_exit_conditions(float swing_settle_error, float swing_settle_time, float swing_timeout){
+            /*Swing Turn Conditions being set to Parameters----------------------*/
             this->swing_settle_error = swing_settle_error;
             this->swing_settle_time = swing_settle_time;
             this->swing_timeout = swing_timeout;
         }
-        
         void Drive::turn_to_angle(float angle){
             turn_to_angle(angle, turn_max_voltage, turn_settle_error, turn_settle_time, turn_timeout, turn_kp, turn_ki, turn_kd, turn_starti);
         }
