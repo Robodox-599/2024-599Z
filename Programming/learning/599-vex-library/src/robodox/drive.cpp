@@ -17,7 +17,18 @@ Drive::Drive(
         start_heading(start_heading),
         leftMotors(leftMotors),
         rightMotors(rightMotors),
-        IMU(std::make_shared<pros::IMU>(IMU))
+        IMU(std::make_shared<pros::IMU>(IMU)),
+        odom(
+            chassisOdom(
+                leftMotors,
+                rightMotors,
+                IMU, /* inertial sensor port here */
+                wheel_diameter, /* wheel diameter*/
+                wheel_ratio, /*gear ratio after */
+                trackWidth, /* track width */
+                start_heading /* start heading */
+            )
+        )
         {        
             leftMotors->set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);
             rightMotors->set_brake_modes(pros::E_MOTOR_BRAKE_HOLD);

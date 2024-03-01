@@ -1,8 +1,6 @@
 #include "robodox/PRELUDE.hpp"
-#include "robodox/odom.h"
-#include "robodox/drive.h"
-#include "robodox/PID.h"
 #include "auto.h"
+#include "RobotSetup.h"
 bool climbToggled = false; 
 bool flapsToggled = false; 
 bool autoCount = true;
@@ -33,86 +31,18 @@ void on_center_button() {
 void initialize() {
 	pros::lcd::initialize();
 	pros::lcd::set_text(1, "Hello PROS User!");
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	
-	pros::Motor LF(7, pros::E_MOTOR_GEARSET_06, true); // left front motor. reversed 
-	pros::Motor LM(9, pros::E_MOTOR_GEARSET_06, true); // left front motor. reversed 
-	pros::Motor LB(10, pros::E_MOTOR_GEARSET_06, true); // left front motor. reversed 
-	
-	pros::Motor RF(2, pros::E_MOTOR_GEARSET_06); // right back motor.
-	pros::Motor RM(1, pros::E_MOTOR_GEARSET_06); // right back motor.
-	pros::Motor RB(3, pros::E_MOTOR_GEARSET_06); // right back motor.
-	
-	std::shared_ptr<pros::MotorGroup> leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{LF, LM, LB});
-	std::shared_ptr<pros::MotorGroup> rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{RF, RM, RB});
-	
-	pros::Motor kickerMotor(8, pros::E_MOTOR_GEARSET_36); // left front motor. reversed 
-	pros::Motor intakeMotor(10, pros::E_MOTOR_GEARSET_06); // left front motor. reversed 
-	
-	pros::IMU imu(12); 
-	#define FLAPS_DIGITAL_SENSOR_PORT 'A'
-	pros::ADIDigitalOut flapsPiston (FLAPS_DIGITAL_SENSOR_PORT);
-	#define CLIMB_DIGITAL_SENSOR_PORT 'B'
-	pros::ADIDigitalOut climbPiston (CLIMB_DIGITAL_SENSOR_PORT);
-
 	LF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	LM.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	LB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	
 	RF.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	RM.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
 	RB.set_brake_mode(pros::E_MOTOR_BRAKE_BRAKE);
-	
 	intakeMotor.set_brake_mode(pros::E_MOTOR_BRAKE_HOLD);
 	kickerMotor.set_brake_mode(pros::E_MOTOR_BRAKE_COAST);
-	
 	imu.reset();
 	pros::lcd::register_btn1_cb(on_center_button);
 }
 
-pros::Controller master(pros::E_CONTROLLER_MASTER);
-
-pros::Motor LF(7); // left front motor. reversed 
-pros::Motor LM(9); // left front motor. reversed 
-pros::Motor LB(10); // left front motor. reversed 
-
-pros::Motor RF(2); // right back motor.
-pros::Motor RM(1); // right back motor.
-pros::Motor RB(3); // right back motor.
-
-pros::Motor kickerMotor(8); // left front motor. reversed 
-pros::Motor intakeMotor(10); // left front motor. reversed 
-pros::IMU imu(12); 
-
-std::shared_ptr<pros::MotorGroup> leftMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{LF, LM, LB});
-std::shared_ptr<pros::MotorGroup> rightMotors = std::make_shared<pros::MotorGroup>(std::initializer_list<pros::Motor>{RF, RM, RB});
-
-pros::ADIDigitalOut flapsPiston (FLAPS_DIGITAL_SENSOR_PORT);
-pros::ADIDigitalOut climbPiston (CLIMB_DIGITAL_SENSOR_PORT);
-
-chassisOdom odom(
-	// L,
-	// R,
-	leftMotors,
-	rightMotors,
-	imu, /* inertial sensor port here */
-	2.75, /* wheel diameter*/
-	0.75, /*gear ratio after */
-	10.5, /* track width */
-	90 /* start heading */
-);
-
-Drive chassis(
-	// L,
-	// R,
-	leftMotors,
-	rightMotors,
-	imu, /* inertial sensor port here */
-	2.75, /* wheel diameter*/
-	0.75, /*gear ratio after */
-	10.5, /* track width */
-	90 /* start heading */
-);
 /*----------------------------------------------------------------------------------*/
 /*                           Function Declaration Below                             */
 void kickerControl(float controllerButton, float kickerPercent){
@@ -257,8 +187,8 @@ void competition_initialize() {}
 */
 void autonomous() {
 	pros::delay(1000);
-	leftMotors->move(127);
-	rightMotors->move(127);
+	// leftMotors->move(127);
+	// rightMotors->move(127);
 	// pros::delay(1000);
 	// R.brake();
 	// L.brake();
@@ -283,25 +213,6 @@ void autonomous() {
 
 
 void opcontrol() {
-	#define FLAPS_DIGITAL_SENSOR_PORT 'A'
-	#define CLIMB_DIGITAL_SENSOR_PORT 'B'
-	pros::Controller master(pros::E_CONTROLLER_MASTER);
-	
-	pros::Motor LF(7); // left front motor. reversed 
-	pros::Motor LM(9); // left front motor. reversed 
-	pros::Motor LB(10); // left front motor. reversed 
-	
-	pros::Motor RF(2); // right back motor.
-	pros::Motor RM(1); // right back motor.
-	pros::Motor RB(3); // right back motor.
-	
-	pros::Motor kickerMotor(8); // left front motor. reversed 
-	pros::Motor intakeMotor(10); // left front motor. reversed 
-	pros::IMU imu(12); 
-
-	pros::ADIDigitalOut flapsPiston (FLAPS_DIGITAL_SENSOR_PORT);
-	pros::ADIDigitalOut climbPiston (CLIMB_DIGITAL_SENSOR_PORT);
-
 	while (true){
 		flapsControl(master.get_digital_new_press(DIGITAL_B), master.get_digital_new_press(DIGITAL_L2));
 		climbControl(master.get_digital_new_press(DIGITAL_X));

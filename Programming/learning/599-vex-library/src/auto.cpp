@@ -3,6 +3,7 @@
 #include "robodox/odom.h"
 #include "robodox/drive.h"
 #include "robodox/util.h"
+#include "RobotSetup.h"
 #include "auto.h"
 
 // constants and other useful functions for auton
@@ -24,14 +25,6 @@ void default_constants(){
       /*drive*/  1.5             ,        250         ,     4000    );
     }
     
-    pros::Motor kickerMotor(8, pros::E_MOTOR_GEARSET_36); // left front motor. reversed 
-    pros::Motor intakeMotor(10, pros::E_MOTOR_GEARSET_06); // left front motor. reversed 
-    
-    pros::IMU imu(12); 
-    #define FLAPS_DIGITAL_SENSOR_PORT 'A'
-    pros::ADIDigitalOut flapsPiston (FLAPS_DIGITAL_SENSOR_PORT);
-    #define CLIMB_DIGITAL_SENSOR_PORT 'B'
-    pros::ADIDigitalOut climbPiston (CLIMB_DIGITAL_SENSOR_PORT);
     void intake(){
       intakeMotor.move(-127);
     }
