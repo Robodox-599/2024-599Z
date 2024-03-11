@@ -2,7 +2,6 @@
 #include "robodox/PID.h"
 #include "robodox/odom.h"
 #include "robodox/drive.h"
-
 chassisOdom::chassisOdom(
     std::shared_ptr<pros::MotorGroup> leftMotors,
     std::shared_ptr<pros::MotorGroup> rightMotors,
@@ -23,8 +22,8 @@ pros::Task odomTask([this]{this->odometry();});
 }
 
 
+
 float chassisOdom::get_absolute_heading(){ 
-  // Retrieves the raw rotation value from the Gyro sensor, scales it, and adjusts it within 0 to 360 degrees
   return(std::fmod((360 - IMU->get_heading()) + start_heading, 360)); 
 }
 
@@ -41,18 +40,14 @@ float chassisOdom::average_encoder_position(){
   float avg_encoder_position = encoder_position /2;
   return (avg_encoder_position);
 }
-// float chassisOdom::average_encoder_position(){
-//   float encoder_position = rightMotor->get_position() + leftMotor->get_position();
-//   float avg_encoder_position = encoder_position /2;
-//   return (avg_encoder_position);
 
-// }
 float chassisOdom::xVal(){
   return x;
 }
 float chassisOdom::yVal(){
   return y;
 }
+
 void chassisOdom::resetOdom(){
   leftMotors->tare_position();
   rightMotors->tare_position();
@@ -79,7 +74,6 @@ void chassisOdom::odometry() {
   resetOdom();
   while (true) {
     if (!(IMU->is_calibrating())){
-      // printf("rightMotors->get_ports().size(): %i\n", rightMotors->get_ports().size());
       double change_in_distance = distance_traveled() - previous_distance_traveled; 
       xCalc(change_in_distance);
       yCalc(change_in_distance);
@@ -89,3 +83,5 @@ void chassisOdom::odometry() {
     pros::delay(10);
   }
 }
+
+

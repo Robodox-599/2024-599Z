@@ -6,6 +6,24 @@
 // RB                   motor         3               
 // LF                   motor         7               
 // RF                   motor         2               
+// catapultMotor        motor         8               
+// intakeMotor          motor         11              
+// flapsPiston          digital_out   A               
+// climbPiston          digital_out   B               
+// LM                   motor         9               
+// RM                   motor         1               
+// IMU                  inertial      12              
+// rot                  rotation      4               
+// distanceSensor       distance      21              
+// ---- END VEXCODE CONFIGURED DEVICES ----
+// ---- START VEXCODE CONFIGURED DEVICES ----
+// Robot Configuration:
+// [Name]               [Type]        [Port(s)]
+// Controller1          controller                    
+// LB                   motor         10              
+// RB                   motor         3               
+// LF                   motor         7               
+// RF                   motor         2               
 // kickerMotor          motor         8               
 // intakeMotor          motor         11              
 // flapsPiston          digital_out   A               
@@ -240,18 +258,22 @@ bool  kickerToggle = false;
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------*/
 /*                           Function Declaration Below                                                                                           */
-void kickerControl(){
- /*This is the Kicker Control Function, takes in no parameters*/
- if (Controller1.ButtonL1.pressing()){
-    /* if l1 is being pressed it will spin the motors to shoot the kicker, then it will be
-    reset using limit switch in the the following "else if" statement*/
-    kickerMotor.spin(forward, 55, velocityUnits::pct); 
- }else {
-    // if there is no input then it will brake the kicker motor to reduce strain on motor
-	  /*brakes motor using coast*/
-    kickerMotor.stop(brakeType:: coast); 
- }
+
+
+void catapultControl(){
+  if (Controller1.ButtonL1.pressing()){
+    catapultMotor.spin(forward, 55, velocityUnits::pct); 
+  } else {
+    catapultMotor.stop(brakeType:: coast); 
+  }
 }
+
+
+
+
+
+
+
 
 void toggleKicker(){
 /*This is the toggleclimb function, it takes in no parameters but uses the value of the climbToggled in
@@ -267,6 +289,9 @@ check the state of the climbToggled*/
     kickerMotor.stop(brakeType:: coast); 
  }
 }
+
+
+
 void intakeControls(){
  //intake control function
  if (Controller1.ButtonR1.pressing()){
@@ -283,6 +308,9 @@ void intakeControls(){
     /*sets brake type to Hold so then the Intake will keep the ball held into the intake*/
     intakeMotor.stop(brakeType:: hold);  }
 }
+
+
+
 
 
 void arcadeDrive(float fwdIn, float trnIn){

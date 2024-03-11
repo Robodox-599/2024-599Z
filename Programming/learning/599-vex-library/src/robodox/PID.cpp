@@ -9,7 +9,6 @@ PID::PID(float error, float kp, float ki, float kd, float starti) :
   kd(kd),
   starti(starti)
 {};
-
 PID::PID(float error, float kp, float ki, float kd, float starti, float settle_error, float settle_time, float timeout) :
   error(error),
   kp(kp),
@@ -38,7 +37,6 @@ float PID::calculate(float error){
   time_spent_running+=10;
   return output;
 }
-
 bool PID::settled(){
   if (time_spent_running>timeout && timeout != 0){
     return(true);
@@ -48,3 +46,4 @@ bool PID::settled(){
   }
   return(false); 
 }
+

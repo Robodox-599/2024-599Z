@@ -9,19 +9,21 @@ class chassisOdom{
         double x = 0;
         double y = 0;
         double previous_distance_traveled = 0;
-    public: 
+    public:
+        chassisOdom();
+        chassisOdom(
+            std::shared_ptr<pros::MotorGroup> leftMotors,
+            std::shared_ptr<pros::MotorGroup> rightMotors,
+            const pros::IMU& IMU,
+            double wheel_diameter,
+            double wheel_ratio, 
+            double trackWidth,
+            double start_heading
+        );
         std::shared_ptr<pros::MotorGroup> leftMotors;
         std::shared_ptr<pros::MotorGroup> rightMotors;
         std::shared_ptr<pros::IMU> IMU;
-        chassisOdom();
-        chassisOdom(
-        std::shared_ptr<pros::MotorGroup> leftMotors,
-        std::shared_ptr<pros::MotorGroup> rightMotors,
-        const pros::IMU& IMU,
-        double wheel_diameter,
-        double wheel_ratio, 
-        double trackWidth,
-        double start_heading);
+        
         float get_absolute_heading();
         float average_encoder_position();
         float yVal();
