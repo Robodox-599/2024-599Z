@@ -8,7 +8,7 @@ extern motor LB;
 extern motor RB;
 extern motor LF;
 extern motor RF;
-extern motor kickerMotor;
+extern motor catapultMotor;
 extern motor intakeMotor;
 extern digital_out flapsPiston;
 extern digital_out climbPiston;

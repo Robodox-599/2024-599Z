@@ -50,49 +50,80 @@ void corner_score(int iterate){
 }
 // autos will start below 
 
-void winpoint(){
-  intake();
-  climbPiston.set(true);
-  chassis.drive_distance(-25);
-  climbPiston.set(false);
-  chassis.turn_to_angle(0);
-  chassis.drive_distance(25);
-  chassis.turn_to_angle(315);
-  chassis.drive_distance(30);
-  outake();
-}
+// void winpoint(){
+//   intake();
+//   climbPiston.set(true);
+//   chassis.drive_distance(-25);
+//   climbPiston.set(false);
+//   chassis.turn_to_angle(0);
+//   chassis.drive_distance(25);
+//   chassis.turn_to_angle(315);
+//   chassis.drive_distance(30);
+//   outake();
+// }
 
 void PID_test(){
   default_constants();
   chassis.turn_to_angle(90);
 }
 void e_Off(){
-  // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_0
-  intake(); //intake spins to hold climb triball
-  chassis.drive_max_voltage = 1000; // changes drive_max_voltage to maximum value to drive as fast as possible
-  chassis.drive_distance(5); // drives 5 inches forward into climb triball
-  default_constants(); // resets constants back to default values
-  chassis.drive_distance(-30); // chassis drives backwards till in front of matchload zone
-  chassis.turn_to_angle(225); // chassis turns around to let wings access matchload zone
-  outake(); // outakes climb triball
-  // flapsPistonLeft.set(true); // opens wing to flick out matchload triball
-  chassis.drive_distance(15); // drives into matchload triball with wing extended to flick out matchload triball
-  // flapsPistonLeft.set(false); // closes left wing
-  chassis.turn_to_angle(270); // turns robot around to use back of robot to push into goals
-  corner_score(2); // does standard corner scoring procedure (driving back and forth at full speed to score)
-  chassis.turn_to_angle(0); // reset back to orignal position
-  intake(); // starts spinning intake to grab 2nd long bar triball
-  chassis.drive_distance(50); // drive to 2nd long bar triball
-  chassis.turn_to_angle(225); // turns to face goal
-  outake(); // outakes 2nd long bar triball to goal
-  chassis.turn_to_angle(90); // turn to first long bar triball
-  intake(); // spin intake for first long bar triball
-  chassis.drive_distance(20); // drives into first long bar triball
-  chassis.turn_to_angle(180); // turns to face goal
-  outake(); // outakes first long bar triball into 3rd longbar triball
-  wings(true); // open both wings
-  chassis.drive_distance(40); // drive into goal and score all balls
-  //total estimated points: 30pts
+  outake();
+  climbPiston.set(true);
+  chassis.drive_distance(15);
+  chassis.turn_to_angle(200);
+  climbPiston.set(false);
+  chassis.drive_distance(23);
+  chassis.turn_to_angle(230);
+  intake();
+  chassis.drive_distance(26);
+  wait(250, msec);
+  chassis.drive_distance(-30);
+  chassis.turn_to_angle(350);
+  outake();
+  chassis.drive_distance(40);
+  chassis.drive_distance(-20);
+  chassis.turn_to_angle(260);
+  intake();
+  chassis.drive_distance(60);
+  chassis.drive_distance(-10);
+  chassis.turn_to_angle(30);
+  outake();
+  wait(250, msec);
+  chassis.turn_to_angle(285);
+  intake();
+  chassis.drive_distance(10);
+  chassis.turn_to_angle(40);
+  outake();
+  flapsPiston.set(true);
+  chassis.drive_distance(50);
+
+
+  // // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_0
+  // intake(); //intake spins to hold climb triball
+  // chassis.drive_max_voltage = 1000; // changes drive_max_voltage to maximum value to drive as fast as possible
+  // chassis.drive_distance(5); // drives 5 inches forward into climb triball
+  // default_constants(); // resets constants back to default values
+  // chassis.drive_distance(-30); // chassis drives backwards till in front of matchload zone
+  // chassis.turn_to_angle(225); // chassis turns around to let wings access matchload zone
+  // outake(); // outakes climb triball
+  // // flapsPistonLeft.set(true); // opens wing to flick out matchload triball
+  // chassis.drive_distance(15); // drives into matchload triball with wing extended to flick out matchload triball
+  // // flapsPistonLeft.set(false); // closes left wing
+  // chassis.turn_to_angle(270); // turns robot around to use back of robot to push into goals
+  // corner_score(2); // does standard corner scoring procedure (driving back and forth at full speed to score)
+  // chassis.turn_to_angle(0); // reset back to orignal position
+  // intake(); // starts spinning intake to grab 2nd long bar triball
+  // chassis.drive_distance(50); // drive to 2nd long bar triball
+  // chassis.turn_to_angle(225); // turns to face goal
+  // outake(); // outakes 2nd long bar triball to goal
+  // chassis.turn_to_angle(90); // turn to first long bar triball
+  // intake(); // spin intake for first long bar triball
+  // chassis.drive_distance(20); // drives into first long bar triball
+  // chassis.turn_to_angle(180); // turns to face goal
+  // outake(); // outakes first long bar triball into 3rd longbar triball
+  // wings(true); // open both wings
+  // chassis.drive_distance(40); // drive into goal and score all balls
+  // //total estimated points: 30pts
 }
 
 void q_Off(){
@@ -134,26 +165,31 @@ void q_Off(){
 
 void e_Def(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.g2b1d1d222ec_0_25
+   outake();
+  wait(250, msec);
+  climbPiston.set(true);
+  chassis.swing_max_voltage = 6; 
+  chassis.right_swing_to_angle(260);
+  wait(500, msec);
+  chassis.drive_distance(-5);
+  climbPiston.set(false);
+  chassis.drive_distance(40);
+  chassis.turn_to_angle(225);
+  chassis.drive_distance(10);
+  chassis.turn_to_angle(315);
+  flapsPiston.set(true);
+  chassis.drive_distance(15);
+  flapsPiston.set(false);
+  chassis.drive_distance(-15);
+  chassis.turn_to_angle(255);
+  chassis.drive_distance(-40);
+  chassis.turn_to_angle(360); // turn to climb bar
+  chassis.drive_distance(20);
+  chassis.turn_to_angle(315);
+  chassis.drive_distance(10); // drive to climb bar to get AWP
+  flapsPiston.set(true);
+  chassis.drive_distance(12); // drive to climb bar to get AWP
   outake(); // spin outake to not posses any triball
-  // flapsPistonLeft.set(true); // opens wing to flick out matchload triball
-  chassis.drive_distance(5); // drives into matchload triball with wing extended to flick out matchload triball
-  // flapsPistonLeft.set(false); // closes wing
-  chassis.drive_distance(-22); // drives backwards and scores alliance triball
-  chassis.drive_distance(12); // drives back forwards 
-  chassis.turn_to_angle(270); // turns to face long bar triballs
-  chassis.drive_distance(50); // drives toward long bar triballs
-  // flapsPistonRight.set(true); // opens wedge wing
-  chassis.turn_to_angle(315); // turns to face long bar triballs
-  chassis.drive_distance(30); // disrupts with wedge wings
-  // flapsPistonRight.set(false); // closes wedge wing
-  chassis.drive_distance(-30); // drives back 
-  chassis.turn_to_angle(270); // turns to go back to matchload zone
-  chassis.drive_distance(-50); // drives back to matchload zone
-  chassis.turn_to_angle(0); // turns to original position
-  chassis.drive_distance(15); // drives forward 
-  chassis.turn_to_angle(135); // turns a little bit more
-  chassis.drive_distance(33); // drives into climb bar to push 2 more balls over 
-  // total estimated points: 13pts
 }
 
 void q_Def(){
@@ -161,26 +197,129 @@ void q_Def(){
   outake();
   wait(250, msec);
   intake(); // spin outake to not posses any triball
-  chassis.drive_distance(-5);
-  // flapsPistonRight.set(true); // opens wing to flick out matchload triball
+  climbPiston.set(true);
+  chassis.swing_max_voltage = 6; 
+  chassis.right_swing_to_angle(260);
   wait(500, msec);
-  chassis.drive_distance(10);
-  chassis.drive_distance(-4);
-  wait(400,  msec);
-  chassis.drive_distance(5);
-  // flapsPistonRight.set(false); // closes wing
-  chassis.drive_distance(5);
+  chassis.drive_distance(-5);
+  climbPiston.set(false);
+  // chassis.drive_distance(5);
   chassis.turn_to_angle(315); // turn to climb bar
-  chassis.drive_distance(30); // drive to climb bar to get AWP
+  chassis.drive_distance(10); // drive to climb bar to get AWP
+  flapsPiston.set(true);
+  chassis.drive_distance(20); // drive to climb bar to get AWP
   outake(); // spin outake to not posses any triball
-
-  // total estimated points: 9pts
+  // total estimated points: 6pts
 }
+
+void auto_setup(){
+  chassis.drive_distance(-25);
+  chassis.drive_distance(10);
+  chassis.turn_to_angle(275);
+  chassis.drive_distance(7);
+}
+
 void auto_skills(){
   outake();
-  wait(30,seconds);
-  // flapsPistonLeft.set(true);
-   chassis.drive_distance(50);
-   chassis.drive_distance(-50);
-
+  auto_setup(); // first step for auto
+  kickerMotor.spin(forward, 55, velocityUnits::pct);
+  wait(25, sec); // kiciing
+  chassis.drive_max_voltage = 12; 
+  chassis.swing_max_voltage = 10; 
+  chassis.turn_max_voltage = 10; 
+  kickerMotor.stop(coast);
+  chassis.drive_distance(-10);
+  chassis.turn_to_angle(0);
+  chassis.drive_distance(17.5);
+  chassis.turn_to_angle(70);
+  chassis.drive_distance(35);
+  flapsPiston.set(true);
+  chassis.drive_distance(30);
+  flapsPiston.set(false);
+  chassis.drive_distance(20);
+  chassis.right_swing_to_angle(120);
+  flapsPiston.set(true);
+  chassis.drive_distance(18);
+  flapsPiston.set(false);
+  chassis.turn_to_angle(330);
+  chassis.drive_distance(-15);
+  chassis.drive_distance(15);
+  chassis.drive_distance(-15);
+  chassis.drive_distance(13);
+  chassis.turn_to_angle(230);
+  flapsPiston.set(true);
+  chassis.drive_distance(25);
+  flapsPiston.set(false);
+  chassis.drive_distance(15);
+  chassis.turn_to_angle(100);
+  flapsPiston.set(true);
+  chassis.drive_distance(35);
+  flapsPiston.set(false);
+  chassis.drive_distance(-35);
+  chassis.turn_to_angle(153);
+  chassis.drive_distance(35);
+  chassis.turn_to_angle(63);
+  flapsPiston.set(true);
+  chassis.drive_distance(20);
+  chassis.drive_distance(-20);
+  chassis.drive_distance(20);
+  chassis.drive_distance(-30);
+  chassis.turn_to_angle(120);
+  chassis.drive_distance(50);
+  flapsPiston.set(false);
+  chassis.turn_to_angle(180);
+  chassis.drive_distance(-15);
+  chassis.drive_distance(15);
+  chassis.drive_distance(-15);
+  chassis.drive_distance(15);
+  flapsPiston.set(true);
+  // chassis.turn_to_angle(50);
+  // flapsPiston.set(false);
+  // chassis.drive_distance(-20);
+  // chassis.turn_to_angle(70);
+  // flapsPiston.set(true);
+  // chassis.drive_distance(50);
+  // chassis.drive_distance(-25);
+  // chassis.drive_distance(25);
+  // chassis.drive_distance(-25);
+  // flapsPiston.set(false);
+  // // flapsPiston.set(false);
+  // // chassis.drive_distance(35);
+  // // flapsPiston.set(true);
+  // // chassis.turn_to_angle(90);
+  // // chassis.drive_distance(15);
+  // // chassis.turn_to_angle(75);
+  // // chassis.drive_distance(85);
+  // // chassis.right_swing_to_angle(215);
+  // // flapsPiston.set(false);
+  // // chassis.drive_distance(-30);
+  // // chassis.drive_distance(15);
+  // // chassis.drive_distance(-15);
+  // // chassis.drive_distance(15);
+  // // chassis.drive_distance(5);
+  // // chassis.turn_to_angle(245);
+  // // chassis.drive_distance(30);
+  // // flapsPiston.set(true);
+  // // chassis.turn_to_angle(290);
+  // // chassis.drive_distance(30);
+  // // chassis.right_swing_to_angle(45);
+  // // chassis.drive_distance(60);
+  // // chassis.drive_distance(-15);
+  // // chassis.drive_distance(15);
+  // // chassis.drive_distance(-30);
+  // // flapsPiston.set(false);
+  // // chassis.turn_to_angle(35);
+  // // chassis.drive_distance(30);
+  // // chassis.turn_to_angle(90);
+  // // flapsPiston.set(true);
+  // // chassis.drive_distance(60);
+  // // chassis.drive_distance(-15);
+  // // chassis.drive_distance(15);
+  // // chassis.drive_distance(-30);
+  // // chassis.turn_to_angle(40);
+  // // chassis.drive_distance(30);
+  // // flapsPiston.set(false);
+  // // chassis.turn_to_angle(300);
+  // // corner_score(2);
+  // // chassis.drive_distance(10);
 }
