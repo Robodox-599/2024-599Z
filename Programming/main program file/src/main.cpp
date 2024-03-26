@@ -183,53 +183,13 @@ void pre_auton(void) {
   vexcodeInit();
   default_constants();
   IMU.calibrate();
-  //This function enables the selection of autonomous routines using the Brain's screen. It continuously cycles through available autonomous routine names displayed on the screen, allowing the user to select an autonomous routine by tapping the screen. The selected routine is determined by the value of current_auton_selection, which changes upon screen taps until the desired routine is chosen. This function effectively facilitates the user's interaction for autonomous routine selection before the start of the autonomous phase.
-  while(auto_started == false){ // Enters a loop controlled by the condition auto_started == false. //Changing the names below will only change their names on the brain screen for auton selection. Tap the brain screen to cycle through autons.
-     Brain.Screen.clearScreen();// Clears the Brain's screen.      
-   switch(current_auton_selection){//Utilizes a switch-case structure to display different autonomous routine names on the Brain's screen based on the current_auton_selection variable.     
-     //The autonomous routine names are "DEFENSIVE AUTON", "OFFENSIVE AUTON", and "AUTON SKILLS" mapped to the respective values 0, 1, and 2.
-     //Allows cycling through the autonomous routine options on the Brain's screen by tapping it.
-     case 0:
-       Brain.Screen.printAt(50, 50, "DEFENSIVE AUTON");
-       break;
-     case 1:
-       Brain.Screen.printAt(50, 50, "OFFENSIVE AUTON");
-       break;
-     case 2:
-       Brain.Screen.printAt(50, 50, "AUTON SKILLS");
-       break;
-   }
-   if(Brain.Screen.pressing()){
-     //Increments the current_auton_selection value upon each tap unless it reaches the maximum value (3), in which case it wraps back to 0.
-     while(Brain.Screen.pressing()) {}
-     current_auton_selection ++;
-   } else if (current_auton_selection == 3){
-     current_auton_selection = 0;
-   }
-   task::sleep(10);
- }
+  Brain.Screen.printAt(50, 50, "DO NOT USE BACK OUT NOW");
 }
 
 
 void autonomous(void) {
-  //This function initiates the execution of the selected autonomous routine based on the current_auton_selection. It triggers the corresponding routine designated for each case. If the routine selection is not modified via the Brain's screen, it defaults to executing a specific routine (autonSkills() in cases 0 and 2). The auto_started flag marks the beginning of the autonomous phase, and the chosen routine runs accordingly, providing the robot with the programmed instructions for autonomous operation.
-  auto_started = true; //Sets the auto_started flag to true, indicating that the autonomous phase has started.
-  switch(current_auton_selection){ 
-    case 0: //Utilizes a switch-case structure to determine which autonomous routine to execute based on the current_auton_selection variable.
-        if(!IMU.isCalibrating()){ /*winpoint(); q_Def(); e_Def(); e_Off(); */ auto_skills();}
-      break;    
-    case 1:       
-        if(!IMU.isCalibrating()){ q_Def(); }
-      break;
-    case 2:
-        if(!IMU.isCalibrating()){ q_Off(); }
-      break;
-    case 3:
-        if(!IMU.isCalibrating()){ e_Off(); }
-      break;
-    case 4:
-       if(!IMU.isCalibrating()){ e_Def(); }
-      break;
+  if(!IMU.isCalibrating()){
+  q_Off();
   }
 }
 
@@ -258,6 +218,7 @@ bool  kickerToggle = false;
 /*----------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------*/
 /*                           Function Declaration Below                                                                                           */
+<<<<<<< Updated upstream
 
 
 void catapultControl(){
@@ -288,6 +249,21 @@ check the state of the climbToggled*/
    //if climbToggled is false then it will switch the climb pistons to be the false
     kickerMotor.stop(brakeType:: coast); 
  }
+=======
+
+
+
+void kickerControl(float resetRotPos) {
+  if (Controller1.ButtonL1.pressing()) {
+    kickerMotor.spin(forward, 60, velocityUnits::pct); 
+  }
+  else if ((rot.position(degrees) < resetRotPos)){
+    kickerMotor.spin(forward, 20, velocityUnits::pct);
+    } 
+  else {
+    kickerMotor.stop(brakeType::coast); 
+  }
+>>>>>>> Stashed changes
 }
 
 
@@ -417,26 +393,32 @@ void skillsSetup(){
     autoCount = !autoCount;
   }
 }
+void flapControl(){
+  if (Controller1.ButtonL2.pressing()){
+    flapsPiston.set(true);
+  } else{
+    flapsPiston.set(false);
+  }
+}
+
 /*                         End Function Declarations                                             */
 /*-----------------------------------------------------------------------------------------------*/
 
 
 void usercontrol(void) {
-  rot.resetPosition(); 
+  rot.resetPosition();
   while (1) {
     //drive controls
-    //arcadeDriveControl(Controller1.Axis3.value(), Controller1.Axis1.value());
     tankDriveControl(Controller1.Axis3.value(), Controller1.Axis2.value());
     //kicker controls
-    kickerControl();
+    kickerControl(52);
     // flaps controls
-    Controller1.ButtonB.pressed(toggleFlaps); // calls the toggle function for the flaps when the button is pressed
-    flapsPiston.set(Controller1.ButtonL2.pressing());
-    Controller1.ButtonUp.pressed(toggleKicker);
+    flapControl();
+    Controller1.ButtonB.pressed(toggleFlaps);
     //intake controls
     intakeControls();
     Controller1.ButtonX.pressed(toggleclimb);
-    skillsSetup();
+    // skillsSetup();
     wait(10, msec); 
   }
 }

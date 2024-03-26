@@ -128,21 +128,22 @@ void e_Off(){
 
 void q_Off(){
   // use slides for setup: https://docs.google.com/presentation/d/1BWDEv9SH7713jcnmh8PpuUGN7VEAN8xQHvmU4T035hI/edit#slide=id.p
-  outake();
-  wait(250, msec);
-  intake(); //intake spins to hold alliance ball
-  chassis.drive_distance(35); // chassis drives forward till in front of goal
+  intake();
+  chassis.drive_distance(-5); 
+  chassis.drive_distance(40); 
   chassis.turn_to_angle(90, 8); // chassis turns to face goal
   outake(); // outakes alliance ball
   wait(400, msec);
-  chassis.turn_to_angle(295); // resets chassis to orignal starting position
+  chassis.turn_to_angle(305); // resets chassis to orignal starting position
   intake(); // intakes further most triball
   chassis.drive_distance(23); // drives to furthermost triball 
   wait(400, msec);
   chassis.turn_to_angle(90, 8); // turns to face goal
+  flapsPiston.set(true);
   outake(); // outakes further most triball
   wait(400, msec);
   chassis.drive_distance(30); // turns to face 2nd long bar triball
+  flapsPiston.set(false);
   chassis.drive_distance(-5); //drives back
   chassis.turn_to_angle(230); // turns to face goal
   intake();
@@ -150,6 +151,7 @@ void q_Off(){
   wait(400,msec);
   chassis.drive_distance(-20);
   chassis.turn_to_angle(90,8);
+  flapsPiston.set(true);
   outake(); // outakes triball
   chassis.drive_distance(20);
   // outake(); // outakes triball
@@ -171,11 +173,13 @@ void e_Def(){
   chassis.swing_max_voltage = 6; 
   chassis.right_swing_to_angle(260);
   wait(500, msec);
-  chassis.drive_distance(-5);
   climbPiston.set(false);
-  chassis.drive_distance(40);
+  chassis.drive_distance(35);
   chassis.turn_to_angle(225);
-  chassis.drive_distance(10);
+  intake();
+  chassis.drive_max_voltage = 9; 
+  chassis.drive_distance(12);
+  chassis.drive_max_voltage = 12; 
   chassis.turn_to_angle(315);
   flapsPiston.set(true);
   chassis.drive_distance(15);
@@ -188,7 +192,7 @@ void e_Def(){
   chassis.turn_to_angle(315);
   chassis.drive_distance(10); // drive to climb bar to get AWP
   flapsPiston.set(true);
-  chassis.drive_distance(12); // drive to climb bar to get AWP
+  chassis.drive_distance(9.5); // drive to climb bar to get AWP
   outake(); // spin outake to not posses any triball
 }
 
@@ -205,9 +209,9 @@ void q_Def(){
   climbPiston.set(false);
   // chassis.drive_distance(5);
   chassis.turn_to_angle(315); // turn to climb bar
+  chassis.drive_distance(20); // drive to climb bar to get AWP
   chassis.drive_distance(10); // drive to climb bar to get AWP
   flapsPiston.set(true);
-  chassis.drive_distance(20); // drive to climb bar to get AWP
   outake(); // spin outake to not posses any triball
   // total estimated points: 6pts
 }
@@ -215,111 +219,59 @@ void q_Def(){
 void auto_setup(){
   chassis.drive_distance(-25);
   chassis.drive_distance(10);
-  chassis.turn_to_angle(275);
-  chassis.drive_distance(7);
+  chassis.turn_to_angle(269);
+  chassis.drive_distance(9);
+  kickerMotor.spin(forward, 60, velocityUnits::pct);
+  wait(25.5, sec); // kicking
+  kickerMotor.stop(coast);
+  chassis.drive_distance(-10);
 }
 
 void auto_skills(){
   outake();
   auto_setup(); // first step for auto
-  kickerMotor.spin(forward, 55, velocityUnits::pct);
-  wait(25, sec); // kiciing
-  chassis.drive_max_voltage = 12; 
-  chassis.swing_max_voltage = 10; 
-  chassis.turn_max_voltage = 10; 
-  kickerMotor.stop(coast);
-  chassis.drive_distance(-10);
   chassis.turn_to_angle(0);
-  chassis.drive_distance(17.5);
-  chassis.turn_to_angle(70);
+  chassis.drive_distance(18.5);
+  chassis.turn_to_angle(65);
   chassis.drive_distance(35);
   flapsPiston.set(true);
   chassis.drive_distance(30);
   flapsPiston.set(false);
-  chassis.drive_distance(20);
-  chassis.right_swing_to_angle(120);
+  chassis.drive_distance(18);
+  chassis.turn_to_angle(125);
   flapsPiston.set(true);
   chassis.drive_distance(18);
   flapsPiston.set(false);
-  chassis.turn_to_angle(330);
-  chassis.drive_distance(-15);
+  chassis.turn_to_angle(300);
+  chassis.drive_distance(-20);
   chassis.drive_distance(15);
-  chassis.drive_distance(-15);
-  chassis.drive_distance(13);
-  chassis.turn_to_angle(230);
+  chassis.drive_distance(-20);
+  chassis.drive_distance(25
+  );
+  chassis.turn_to_angle(100);
+  chassis.drive_distance(15);
+  chassis.drive_distance(-13);
+  chassis.drive_distance(15);
+  chassis.drive_distance(-13);
+  chassis.turn_to_angle(200);
+  chassis.drive_max_voltage = 10;
+  chassis.drive_distance(45);
+  chassis.turn_to_angle(155);
+  chassis.drive_distance(9);
+  chassis.turn_to_angle(85);
+  flapsPiston.set(true);
+  chassis.drive_distance(35);
+  flapsPiston.set(false);
+  chassis.drive_distance(-25);
+  chassis.turn_to_angle(155);
+  chassis.drive_distance(25);
+  chassis.turn_to_angle(45);
   flapsPiston.set(true);
   chassis.drive_distance(25);
   flapsPiston.set(false);
-  chassis.drive_distance(15);
-  chassis.turn_to_angle(100);
-  flapsPiston.set(true);
-  chassis.drive_distance(35);
-  flapsPiston.set(false);
-  chassis.drive_distance(-35);
-  chassis.turn_to_angle(153);
-  chassis.drive_distance(35);
-  chassis.turn_to_angle(63);
-  flapsPiston.set(true);
-  chassis.drive_distance(20);
-  chassis.drive_distance(-20);
-  chassis.drive_distance(20);
-  chassis.drive_distance(-30);
-  chassis.turn_to_angle(120);
-  chassis.drive_distance(50);
-  flapsPiston.set(false);
-  chassis.turn_to_angle(180);
   chassis.drive_distance(-15);
-  chassis.drive_distance(15);
-  chassis.drive_distance(-15);
-  chassis.drive_distance(15);
+  chassis.turn_to_angle(127);
+  flapsPiston.set(false);
+  chassis.drive_distance(45);
   flapsPiston.set(true);
-  // chassis.turn_to_angle(50);
-  // flapsPiston.set(false);
-  // chassis.drive_distance(-20);
-  // chassis.turn_to_angle(70);
-  // flapsPiston.set(true);
-  // chassis.drive_distance(50);
-  // chassis.drive_distance(-25);
-  // chassis.drive_distance(25);
-  // chassis.drive_distance(-25);
-  // flapsPiston.set(false);
-  // // flapsPiston.set(false);
-  // // chassis.drive_distance(35);
-  // // flapsPiston.set(true);
-  // // chassis.turn_to_angle(90);
-  // // chassis.drive_distance(15);
-  // // chassis.turn_to_angle(75);
-  // // chassis.drive_distance(85);
-  // // chassis.right_swing_to_angle(215);
-  // // flapsPiston.set(false);
-  // // chassis.drive_distance(-30);
-  // // chassis.drive_distance(15);
-  // // chassis.drive_distance(-15);
-  // // chassis.drive_distance(15);
-  // // chassis.drive_distance(5);
-  // // chassis.turn_to_angle(245);
-  // // chassis.drive_distance(30);
-  // // flapsPiston.set(true);
-  // // chassis.turn_to_angle(290);
-  // // chassis.drive_distance(30);
-  // // chassis.right_swing_to_angle(45);
-  // // chassis.drive_distance(60);
-  // // chassis.drive_distance(-15);
-  // // chassis.drive_distance(15);
-  // // chassis.drive_distance(-30);
-  // // flapsPiston.set(false);
-  // // chassis.turn_to_angle(35);
-  // // chassis.drive_distance(30);
-  // // chassis.turn_to_angle(90);
-  // // flapsPiston.set(true);
-  // // chassis.drive_distance(60);
-  // // chassis.drive_distance(-15);
-  // // chassis.drive_distance(15);
-  // // chassis.drive_distance(-30);
-  // // chassis.turn_to_angle(40);
-  // // chassis.drive_distance(30);
-  // // flapsPiston.set(false);
-  // // chassis.turn_to_angle(300);
-  // // corner_score(2);
-  // // chassis.drive_distance(10);
 }
