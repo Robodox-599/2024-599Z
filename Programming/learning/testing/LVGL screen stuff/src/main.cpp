@@ -57,9 +57,6 @@ static void skills_event(lv_event_t * e)
 static void format_table(lv_event_t * e){
     lv_obj_t * obj = lv_event_get_target(e);
     lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
-    uint32_t row = dsc->id /  lv_table_get_col_cnt(obj);
-    uint32_t col = dsc->id - row * lv_table_get_col_cnt(obj);
-    /*If the cells are drawn...*/
     if(lv_event_get_code(e) == LV_EVENT_DRAW_PART_BEGIN){
         if(dsc->part == LV_PART_ITEMS) {
             dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
@@ -72,9 +69,17 @@ static void format_table(lv_event_t * e){
             dsc->rect_dsc->bg_opa = LV_OPA_COVER;  
         }  
     }
+}
+
+static void highlight_row(lv_event_t * e){
+    lv_obj_t * obj = lv_event_get_target(e);
+    lv_obj_draw_part_dsc_t * dsc = lv_event_get_cover_area(e);
+    uint32_t row = dsc->id /  lv_table_get_col_cnt(obj);
+    uint32_t col = dsc->id - row * lv_table_get_col_cnt(obj);
     uint16_t rowIndex;
     uint16_t colIndex;
     lv_table_get_selected_cell(obj, &rowIndex, &colIndex);
+    printf("Row index: %d\n", rowIndex);
     if(rowIndex == row){
         if(dsc->part == LV_PART_ITEMS) {
             dsc->label_dsc->color = highlight;
@@ -308,15 +313,14 @@ void set_tabs(){
     lv_table_set_col_width(table, 3, 50);
     lv_table_set_col_width(table, 4, 50);
     lv_table_set_col_width(table, 5, 50);
-
     /*sets dimensions + position*/
     lv_obj_set_height(table, 220);
     lv_obj_set_width(table, 298.5);
     lv_obj_set_pos(table, 160, -5);
     lv_obj_set_scrollbar_mode(table, LV_SCROLLBAR_MODE_OFF);
     /*Add an event callback to to apply some custom drawing*/
-    lv_obj_add_event_cb(table, format_table, LV_EVENT_ALL, NULL);
-
+    lv_obj_add_event_cb(table, format_table, LV_EVENT_DRAW_PART_BEGIN, NULL);
+    lv_obj_add_event_cb(table, highlight_row, LV_EVENT_ALL, NULL);
     static lv_style_t tab_style;
     lv_style_init(&tab_style);
     lv_style_set_radius(&tab_style, 10);
