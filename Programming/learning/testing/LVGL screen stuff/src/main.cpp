@@ -1,6 +1,9 @@
 #include "main.h"
 #include "liblvgl/lvgl.h"
 #include "logo_black.h"
+Motor motor_pos_1(2, pros::v5::MotorGears::green, pros::v5::MotorUnits::degrees); 
+Motor motor_pos_2(10, pros::v5::MotorGears::green, pros::v5::MotorUnits::degrees); 
+
 lv_color_t fun_green =  lv_color_make(0, 100, 46);
 lv_color_t  highlight = lv_palette_main(LV_PALETTE_LIGHT_GREEN);
 lv_obj_t * tabview = lv_tabview_create(lv_scr_act(), LV_DIR_LEFT, 0);
@@ -18,6 +21,10 @@ lv_obj_t* createImage(const lv_img_dsc_t* image, lv_obj_t* parent, int width, in
     lv_obj_set_y(img, y);
     return img;
 }
+
+
+    lv_obj_t * table = lv_table_create(tab2);
+
 static void near_side_event(lv_event_t * e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -54,39 +61,167 @@ static void skills_event(lv_event_t * e)
         auto_picker = 4; 
     }
 }
+void update_table(){
+    float num = motor_pos_1.get_position();
+    char limited_precision_str[20]; 
+    float limited_precision_num;
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 0, limited_precision_str);
+
+    num = motor_pos_2.get_position();    
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 0, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 0, "N/A");
+    lv_table_set_cell_value(table, 4, 0, "N/A");
+    lv_table_set_cell_value(table, 5, 0, "N/A");
+    lv_table_set_cell_value(table, 6, 0, "N/A");
+    lv_table_set_cell_value(table, 7, 0, "N/A");
+    lv_table_set_cell_value(table, 8, 0, "N/A");
+
+    /*Fill the second column*/
+    lv_table_set_cell_value(table, 0, 1, LV_SYMBOL_FILE"");
+
+    num = motor_pos_1.get_port();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 1, limited_precision_str);
+
+    num = motor_pos_2.get_port();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 1, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 1, "N/A");
+    lv_table_set_cell_value(table, 4, 1, "N/A");
+    lv_table_set_cell_value(table, 5, 1, "N/A");
+    lv_table_set_cell_value(table, 6, 1, "N/A");
+    lv_table_set_cell_value(table, 7, 1, "N/A");
+    lv_table_set_cell_value(table, 8, 1, "N/A");
+
+    /*fill the third column*/
+    lv_table_set_cell_value(table, 0, 2, LV_SYMBOL_CHARGE "");
+
+    num = motor_pos_1.get_voltage();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 2, limited_precision_str);
+
+    num = motor_pos_2.get_voltage();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 2, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 2, "N/A");
+    lv_table_set_cell_value(table, 4, 2, "N/A");
+    lv_table_set_cell_value(table, 5, 2, "N/A");
+    lv_table_set_cell_value(table, 6, 2, "N/A");
+    lv_table_set_cell_value(table, 7, 2, "N/A");
+    lv_table_set_cell_value(table, 8, 2, "N/A");
+
+    /*fill the fourth coloumn*/
+    lv_table_set_cell_value(table, 0, 3, "%");
+    num = motor_pos_1.get_efficiency();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 3, limited_precision_str);
+
+    num = motor_pos_2.get_efficiency();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 3,  limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 3, "N/A");
+    lv_table_set_cell_value(table, 4, 3, "N/A");
+    lv_table_set_cell_value(table, 5, 3, "N/A");
+    lv_table_set_cell_value(table, 6, 3, "N/A");
+    lv_table_set_cell_value(table, 7, 3, "N/A");
+    lv_table_set_cell_value(table, 8, 3, "N/A");
+
+    /*fill the fifth coloumn*/
+    lv_table_set_cell_value(table, 0, 5, LV_SYMBOL_GPS "");
+
+    num = motor_pos_1.get_actual_velocity();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 5, limited_precision_str);
+
+    num = motor_pos_1.get_actual_velocity();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 5, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 5, "N/A");
+    lv_table_set_cell_value(table, 4, 5, "N/A");
+    lv_table_set_cell_value(table, 5, 5, "N/A");
+    lv_table_set_cell_value(table, 6, 5, "N/A");
+    lv_table_set_cell_value(table, 7, 5, "N/A");
+    lv_table_set_cell_value(table, 8, 5, "N/A");
+
+    /*fill the sixth column */
+    lv_table_set_cell_value(table, 0, 4, LV_SYMBOL_WARNING "");
+    num = motor_pos_1.get_temperature();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 4, limited_precision_str);
+
+    num = motor_pos_2.get_temperature();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 4, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 4, "N/A");
+    lv_table_set_cell_value(table, 4, 4, "N/A");
+    lv_table_set_cell_value(table, 5, 4, "N/A");
+    lv_table_set_cell_value(table, 6, 4, "N/A");
+    lv_table_set_cell_value(table, 7, 4, "N/A");
+    lv_table_set_cell_value(table, 8, 4, "N/A");
+}
+
+int set_row_index;
+
+static void highlight_row(lv_event_t * e){
+    lv_obj_t * table = lv_event_get_target(e);
+    uint16_t rowIndex;
+    uint16_t colIndex;
+    lv_table_get_selected_cell(table, &rowIndex, &colIndex);
+    set_row_index = rowIndex;
+    update_table();
+}
+
 static void format_table(lv_event_t * e){
     lv_obj_t * obj = lv_event_get_target(e);
     lv_obj_draw_part_dsc_t * dsc = lv_event_get_draw_part_dsc(e);
-    if(lv_event_get_code(e) == LV_EVENT_DRAW_PART_BEGIN){
-        if(dsc->part == LV_PART_ITEMS) {
+    if(dsc->part == LV_PART_ITEMS) {
+        uint32_t row = dsc->id /  lv_table_get_col_cnt(obj);
+        uint32_t col = dsc->id - row * lv_table_get_col_cnt(obj);
+        dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
+        dsc->label_dsc->color = lv_color_black();
+        dsc->rect_dsc->bg_color = lv_color_white();
+        dsc->rect_dsc->bg_opa = LV_OPA_COVER;
+        if (set_row_index == row){
             dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
-            dsc->label_dsc->color = lv_color_black();
-            dsc->rect_dsc->bg_color = lv_color_white();
-            dsc->rect_dsc->bg_opa = LV_OPA_COVER;
-            dsc->label_dsc->align = LV_TEXT_ALIGN_CENTER;
-            dsc->label_dsc->color = lv_color_black();
-            dsc->rect_dsc->bg_color = lv_color_white();
-            dsc->rect_dsc->bg_opa = LV_OPA_COVER;  
-        }  
-    }
-}
-
-static void highlight_row(lv_event_t * e){
-    lv_obj_t * obj = lv_event_get_target(e);
-    lv_obj_draw_part_dsc_t * dsc = lv_event_get_cover_area(e);
-    uint32_t row = dsc->id /  lv_table_get_col_cnt(obj);
-    uint32_t col = dsc->id - row * lv_table_get_col_cnt(obj);
-    uint16_t rowIndex;
-    uint16_t colIndex;
-    lv_table_get_selected_cell(obj, &rowIndex, &colIndex);
-    printf("Row index: %d\n", rowIndex);
-    if(rowIndex == row){
-        if(dsc->part == LV_PART_ITEMS) {
-            dsc->label_dsc->color = highlight;
             dsc->rect_dsc->bg_color = highlight;
-        }  
+            dsc->rect_dsc->bg_opa = LV_OPA_COVER;
+            if (set_row_index == 1){
+                motor_pos_2 = 0;
+                motor_pos_1 = 127;
+                printf("%f", set_row_index);
+            } else if (set_row_index == 2){
+                motor_pos_1 = 0;
+                motor_pos_2 = -127;
+                printf("%f", set_row_index);
+            }else  {
+                motor_pos_1 = 0;
+                motor_pos_2 = 0;
+                printf("%f", set_row_index);
+            }
+        }
     }
-}
+} 
+
 
 void set_tabs(){
     lv_obj_set_style_bg_color(tabview, fun_green, 0);
@@ -236,8 +371,6 @@ void set_tabs(){
     // lv_label_set_text(label, "8");                   
     // lv_obj_center(label);
     // lv_obj_add_style(btn, &btn_style, 0);
-
-    lv_obj_t * table = lv_table_create(tab2);
     lv_obj_set_style_border_color(table, lv_color_black(), 0);
     lv_obj_set_style_border_width(table, 2, 0);
     lv_obj_set_style_bg_color(table, lv_color_white(), 0);
@@ -248,64 +381,126 @@ void set_tabs(){
     lv_obj_set_style_bg_opa(table, LV_OPA_COVER, 0);
     /*Fill the first column*/
     lv_table_set_cell_value(table, 0, 0, LV_SYMBOL_REFRESH "");
-    lv_table_set_cell_value(table, 1, 0, "1");
-    lv_table_set_cell_value(table, 2, 0, "2");
-    lv_table_set_cell_value(table, 3, 0, "3");
-    lv_table_set_cell_value(table, 4, 0, "4");
-    lv_table_set_cell_value(table, 5, 0, "5");
-    lv_table_set_cell_value(table, 6, 0, "6");
-    lv_table_set_cell_value(table, 7, 0, "7");
-    lv_table_set_cell_value(table, 8, 0, "8");
+
+    float num = motor_pos_1.get_position();
+    char limited_precision_str[20]; 
+    float limited_precision_num;
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 0, limited_precision_str);
+
+    num = motor_pos_2.get_position();    
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 0, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 0, "N/A");
+    lv_table_set_cell_value(table, 4, 0, "N/A");
+    lv_table_set_cell_value(table, 5, 0, "N/A");
+    lv_table_set_cell_value(table, 6, 0, "N/A");
+    lv_table_set_cell_value(table, 7, 0, "N/A");
+    lv_table_set_cell_value(table, 8, 0, "N/A");
+
     /*Fill the second column*/
     lv_table_set_cell_value(table, 0, 1, LV_SYMBOL_FILE"");
-    lv_table_set_cell_value(table, 1, 1, "1");
-    lv_table_set_cell_value(table, 2, 1, "2");
-    lv_table_set_cell_value(table, 3, 1, "3");
-    lv_table_set_cell_value(table, 4, 1, "4");
-    lv_table_set_cell_value(table, 5, 1, "5");
-    lv_table_set_cell_value(table, 6, 1, "6");
-    lv_table_set_cell_value(table, 7, 1, "7");
-    lv_table_set_cell_value(table, 8, 1, "8");
+
+    num = motor_pos_1.get_port();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 1, limited_precision_str);
+
+    num = motor_pos_2.get_port();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 1, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 1, "N/A");
+    lv_table_set_cell_value(table, 4, 1, "N/A");
+    lv_table_set_cell_value(table, 5, 1, "N/A");
+    lv_table_set_cell_value(table, 6, 1, "N/A");
+    lv_table_set_cell_value(table, 7, 1, "N/A");
+    lv_table_set_cell_value(table, 8, 1, "N/A");
+
     /*fill the third column*/
     lv_table_set_cell_value(table, 0, 2, LV_SYMBOL_CHARGE "");
-    lv_table_set_cell_value(table, 1, 2, "1");
-    lv_table_set_cell_value(table, 2, 2, "2");
-    lv_table_set_cell_value(table, 3, 2, "3");
-    lv_table_set_cell_value(table, 4, 2, "4");
-    lv_table_set_cell_value(table, 5, 2, "5");
-    lv_table_set_cell_value(table, 6, 2, "6");
-    lv_table_set_cell_value(table, 7, 2, "7");
-    lv_table_set_cell_value(table, 8, 2, "8");
+
+    num = motor_pos_1.get_voltage();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 2, limited_precision_str);
+
+    num = motor_pos_2.get_voltage();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 2, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 2, "N/A");
+    lv_table_set_cell_value(table, 4, 2, "N/A");
+    lv_table_set_cell_value(table, 5, 2, "N/A");
+    lv_table_set_cell_value(table, 6, 2, "N/A");
+    lv_table_set_cell_value(table, 7, 2, "N/A");
+    lv_table_set_cell_value(table, 8, 2, "N/A");
+
     /*fill the fourth coloumn*/
     lv_table_set_cell_value(table, 0, 3, "%");
-    lv_table_set_cell_value(table, 1, 3, "1");
-    lv_table_set_cell_value(table, 2, 3, "2");
-    lv_table_set_cell_value(table, 3, 3, "3");
-    lv_table_set_cell_value(table, 4, 3, "4");
-    lv_table_set_cell_value(table, 5, 3, "5");
-    lv_table_set_cell_value(table, 6, 3, "6");
-    lv_table_set_cell_value(table, 7, 3, "7");
-    lv_table_set_cell_value(table, 8, 3, "8");
+    num = motor_pos_1.get_efficiency();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 3, limited_precision_str);
+
+    num = motor_pos_2.get_efficiency();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 3,  limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 3, "N/A");
+    lv_table_set_cell_value(table, 4, 3, "N/A");
+    lv_table_set_cell_value(table, 5, 3, "N/A");
+    lv_table_set_cell_value(table, 6, 3, "N/A");
+    lv_table_set_cell_value(table, 7, 3, "N/A");
+    lv_table_set_cell_value(table, 8, 3, "N/A");
+
     /*fill the fifth coloumn*/
     lv_table_set_cell_value(table, 0, 5, LV_SYMBOL_GPS "");
-    lv_table_set_cell_value(table, 1, 5, "1");
-    lv_table_set_cell_value(table, 2, 5, "2");
-    lv_table_set_cell_value(table, 3, 5, "3");
-    lv_table_set_cell_value(table, 4, 5, "4");
-    lv_table_set_cell_value(table, 5, 5, "5");
-    lv_table_set_cell_value(table, 6, 5, "6");
-    lv_table_set_cell_value(table, 7, 5, "7");
-    lv_table_set_cell_value(table, 8, 5, "8");
+
+    num = motor_pos_1.get_actual_velocity();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 5, limited_precision_str);
+
+    num = motor_pos_1.get_actual_velocity();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 5, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 5, "N/A");
+    lv_table_set_cell_value(table, 4, 5, "N/A");
+    lv_table_set_cell_value(table, 5, 5, "N/A");
+    lv_table_set_cell_value(table, 6, 5, "N/A");
+    lv_table_set_cell_value(table, 7, 5, "N/A");
+    lv_table_set_cell_value(table, 8, 5, "N/A");
+
     /*fill the sixth column */
     lv_table_set_cell_value(table, 0, 4, LV_SYMBOL_WARNING "");
-    lv_table_set_cell_value(table, 1, 4, "1");
-    lv_table_set_cell_value(table, 2, 4, "2");
-    lv_table_set_cell_value(table, 3, 4, "3");
-    lv_table_set_cell_value(table, 4, 4, "4");
-    lv_table_set_cell_value(table, 5, 4, "5");
-    lv_table_set_cell_value(table, 6, 4, "6");
-    lv_table_set_cell_value(table, 7, 4, "7");
-    lv_table_set_cell_value(table, 8, 4, "8");
+    num = motor_pos_1.get_temperature();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 1, 4, limited_precision_str);
+
+    num = motor_pos_2.get_temperature();
+    snprintf(limited_precision_str, sizeof(limited_precision_str), "%.2f", num);
+    sscanf(limited_precision_str, "%f", &limited_precision_num);
+    lv_table_set_cell_value(table, 2, 4, limited_precision_str);
+
+    lv_table_set_cell_value(table, 3, 4, "N/A");
+    lv_table_set_cell_value(table, 4, 4, "N/A");
+    lv_table_set_cell_value(table, 5, 4, "N/A");
+    lv_table_set_cell_value(table, 6, 4, "N/A");
+    lv_table_set_cell_value(table, 7, 4, "N/A");
+    lv_table_set_cell_value(table, 8, 4, "N/A");
+
+
+    
     /*sets all widths of columns*/
     lv_table_set_col_width(table, 0, 50);
     lv_table_set_col_width(table, 1, 50);
@@ -400,9 +595,8 @@ void lv_example_dropdown_1(void)
 
 void initialize() {
     set_tabs();
-    lv_example_dropdown_1();}
-
-
+    lv_example_dropdown_1();
+}
 
 void disabled() {}
 
@@ -418,7 +612,7 @@ void autonomous() {
     } else if (auto_picker == 4){
         //code for skills here
     } else {
-        //default auto here
+        //default auto here i love robokauz but why is their climb single diplay?
     }
 }
 
